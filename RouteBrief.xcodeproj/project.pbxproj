@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3107767D1A312E00009D6173 /* Airline.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107767A1A312E00009D6173 /* Airline.m */; };
+		3107767E1A312E00009D6173 /* Airlines.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107767C1A312E00009D6173 /* Airlines.m */; };
 		314116C01A0D3E5A001F6E4B /* HudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 314116BF1A0D3E5A001F6E4B /* HudView.m */; };
-		314116D61A18F4CC001F6E4B /* airlineData.json in Resources */ = {isa = PBXBuildFile; fileRef = 314116D51A18F4CC001F6E4B /* airlineData.json */; };
 		314E894D19F5961A00C2D7B5 /* WeatherDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 314E894C19F5961A00C2D7B5 /* WeatherDetailViewController.m */; };
 		315279161A2A02B300CA78C9 /* ChooseAirlineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 315279151A2A02B300CA78C9 /* ChooseAirlineViewController.m */; };
-		315279191A2A073600CA78C9 /* AirlineDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 315279181A2A073600CA78C9 /* AirlineDataObject.m */; };
-		315279561A2A715600CA78C9 /* JSONLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 315279551A2A715600CA78C9 /* JSONLoader.m */; };
 		3165AEA51A02E76D005C4AD8 /* NearestAirportsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3165AEA41A02E76D005C4AD8 /* NearestAirportsViewController.m */; };
 		31A7081219E9743A004BEDAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A7081119E9743A004BEDAF /* main.m */; };
 		31A7081519E9743B004BEDAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A7081419E9743B004BEDAF /* AppDelegate.m */; };
@@ -25,6 +24,8 @@
 		31A7083D19E98836004BEDAF /* WeatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A7083C19E98836004BEDAF /* WeatherViewController.m */; };
 		31A7084319EA09ED004BEDAF /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A7084219EA09ED004BEDAF /* ScheduleViewController.m */; };
 		31ABA73819F70A600089AAA1 /* CurrentWxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31ABA73719F70A600089AAA1 /* CurrentWxViewController.m */; };
+		31D820601A34AD5B0056C84E /* airlineData.json in Resources */ = {isa = PBXBuildFile; fileRef = 31D8205F1A34AD5B0056C84E /* airlineData.json */; };
+		31D820631A34C2800056C84E /* SearchResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31D820621A34C2800056C84E /* SearchResultsController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,17 +39,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		310776791A312E00009D6173 /* Airline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Airline.h; sourceTree = "<group>"; };
+		3107767A1A312E00009D6173 /* Airline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Airline.m; sourceTree = "<group>"; };
+		3107767B1A312E00009D6173 /* Airlines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Airlines.h; sourceTree = "<group>"; };
+		3107767C1A312E00009D6173 /* Airlines.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Airlines.m; sourceTree = "<group>"; };
 		314116BE1A0D3E5A001F6E4B /* HudView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HudView.h; sourceTree = "<group>"; };
 		314116BF1A0D3E5A001F6E4B /* HudView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HudView.m; sourceTree = "<group>"; };
-		314116D51A18F4CC001F6E4B /* airlineData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = airlineData.json; path = ../../../../../Downloads/airlineData.json; sourceTree = "<group>"; };
 		314E894B19F5961A00C2D7B5 /* WeatherDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherDetailViewController.h; sourceTree = "<group>"; };
 		314E894C19F5961A00C2D7B5 /* WeatherDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherDetailViewController.m; sourceTree = "<group>"; };
 		315279141A2A02B300CA78C9 /* ChooseAirlineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseAirlineViewController.h; sourceTree = "<group>"; };
 		315279151A2A02B300CA78C9 /* ChooseAirlineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseAirlineViewController.m; sourceTree = "<group>"; };
-		315279171A2A073600CA78C9 /* AirlineDataObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirlineDataObject.h; sourceTree = "<group>"; };
-		315279181A2A073600CA78C9 /* AirlineDataObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirlineDataObject.m; sourceTree = "<group>"; };
-		315279541A2A715600CA78C9 /* JSONLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONLoader.h; sourceTree = "<group>"; };
-		315279551A2A715600CA78C9 /* JSONLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONLoader.m; sourceTree = "<group>"; };
 		3165AEA31A02E76D005C4AD8 /* NearestAirportsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NearestAirportsViewController.h; sourceTree = "<group>"; };
 		3165AEA41A02E76D005C4AD8 /* NearestAirportsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NearestAirportsViewController.m; sourceTree = "<group>"; };
 		31A7080C19E9743A004BEDAF /* RouteBrief.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RouteBrief.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,6 +72,9 @@
 		31A7084219EA09ED004BEDAF /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
 		31ABA73619F70A600089AAA1 /* CurrentWxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentWxViewController.h; sourceTree = "<group>"; };
 		31ABA73719F70A600089AAA1 /* CurrentWxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentWxViewController.m; sourceTree = "<group>"; };
+		31D8205F1A34AD5B0056C84E /* airlineData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = airlineData.json; path = ../../../parseAirlines/airlineData.json; sourceTree = "<group>"; };
+		31D820611A34C2800056C84E /* SearchResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultsController.h; sourceTree = "<group>"; };
+		31D820621A34C2800056C84E /* SearchResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultsController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +128,8 @@
 				31ABA73719F70A600089AAA1 /* CurrentWxViewController.m */,
 				315279141A2A02B300CA78C9 /* ChooseAirlineViewController.h */,
 				315279151A2A02B300CA78C9 /* ChooseAirlineViewController.m */,
+				31D820611A34C2800056C84E /* SearchResultsController.h */,
+				31D820621A34C2800056C84E /* SearchResultsController.m */,
 				31A7083B19E98836004BEDAF /* WeatherViewController.h */,
 				31A7083C19E98836004BEDAF /* WeatherViewController.m */,
 				314E894B19F5961A00C2D7B5 /* WeatherDetailViewController.h */,
@@ -146,11 +151,11 @@
 				31A7081119E9743A004BEDAF /* main.m */,
 				31A7083819E981BD004BEDAF /* FlightAwareCaller.h */,
 				31A7083919E981BD004BEDAF /* FlightAwareCaller.m */,
-				315279171A2A073600CA78C9 /* AirlineDataObject.h */,
-				315279181A2A073600CA78C9 /* AirlineDataObject.m */,
-				315279541A2A715600CA78C9 /* JSONLoader.h */,
-				315279551A2A715600CA78C9 /* JSONLoader.m */,
-				314116D51A18F4CC001F6E4B /* airlineData.json */,
+				310776791A312E00009D6173 /* Airline.h */,
+				3107767A1A312E00009D6173 /* Airline.m */,
+				3107767B1A312E00009D6173 /* Airlines.h */,
+				3107767C1A312E00009D6173 /* Airlines.m */,
+				31D8205F1A34AD5B0056C84E /* airlineData.json */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -254,7 +259,7 @@
 			files = (
 				31A7081B19E9743B004BEDAF /* Main.storyboard in Resources */,
 				31A7082019E9743B004BEDAF /* LaunchScreen.xib in Resources */,
-				314116D61A18F4CC001F6E4B /* airlineData.json in Resources */,
+				31D820601A34AD5B0056C84E /* airlineData.json in Resources */,
 				31A7081D19E9743B004BEDAF /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -273,19 +278,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3107767D1A312E00009D6173 /* Airline.m in Sources */,
 				31A7081519E9743B004BEDAF /* AppDelegate.m in Sources */,
 				31A7084319EA09ED004BEDAF /* ScheduleViewController.m in Sources */,
 				31A7081219E9743A004BEDAF /* main.m in Sources */,
 				31A7083719E97670004BEDAF /* FlightNumberViewController.m in Sources */,
 				314116C01A0D3E5A001F6E4B /* HudView.m in Sources */,
+				31D820631A34C2800056C84E /* SearchResultsController.m in Sources */,
 				314E894D19F5961A00C2D7B5 /* WeatherDetailViewController.m in Sources */,
 				31ABA73819F70A600089AAA1 /* CurrentWxViewController.m in Sources */,
-				315279191A2A073600CA78C9 /* AirlineDataObject.m in Sources */,
 				31A7083D19E98836004BEDAF /* WeatherViewController.m in Sources */,
+				3107767E1A312E00009D6173 /* Airlines.m in Sources */,
 				31A7083A19E981BD004BEDAF /* FlightAwareCaller.m in Sources */,
 				3165AEA51A02E76D005C4AD8 /* NearestAirportsViewController.m in Sources */,
 				315279161A2A02B300CA78C9 /* ChooseAirlineViewController.m in Sources */,
-				315279561A2A715600CA78C9 /* JSONLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
