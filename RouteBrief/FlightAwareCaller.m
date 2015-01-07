@@ -30,6 +30,7 @@
 - (void)getMetarForAirport:(NSString *)airports completionHandler:(void (^)(NSString *results, NSError *error))completionHandler
 {
     NSLog(@"getMetar");
+
     
     NSString *requestString = [NSString stringWithFormat:@"http://%@:%@@flightxml.flightaware.com/json/FlightXML2/Metar?airport=%@", FLIGHTAWARE_USERNAME, FLIGHTAWARE_API_KEY, airports];
     NSLog(@"requestSTring: %@", requestString);

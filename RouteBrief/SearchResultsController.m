@@ -16,32 +16,29 @@
 
 @implementation SearchResultsController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    self.array = @[@"One", @"Two", @"Three", @"Four", @"Five"];
-    
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return [self.array count];
+    return [self.searchResults count];
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchResultCell" forIndexPath:indexPath];
     
-    cell.textLabel.text = self.array[indexPath.row];
+    cell.textLabel.text = self.searchResults[indexPath.row];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    self.selectedAirline = cell.textLabel.text;
+    
+    [self performSegueWithIdentifier:@"SearchAirlineCode" sender:self];
 }
 
 @end

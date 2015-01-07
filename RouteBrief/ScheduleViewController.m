@@ -10,6 +10,7 @@
 #import "FlightNumberViewController.h"
 #import "FlightAwareCaller.h"
 #import "WeatherViewController.h"
+#import "CustomCellBackground.h"
 #import "HudView.h"
 
 
@@ -82,13 +83,12 @@
     return [self.scheduledFlights count];
 }
 
-// Origin and destination don't update after first row selection
-// Also might not choose orig and dest for correct row
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ScheduleMatch" forIndexPath:indexPath];
+    cell.backgroundView = [[CustomCellBackground alloc] init];
+    cell.selectedBackgroundView = [[CustomCellBackground alloc] init];
     
     id flightTime = self.scheduledFlights[indexPath.row][@"filed_time"];
     NSTimeInterval time = [flightTime intValue];
@@ -97,8 +97,6 @@
     
     [_formatter setDateStyle:NSDateFormatterLongStyle];
     [_formatter setTimeStyle:NSDateFormatterShortStyle];
-    
-    
     
     // Log date and route of each flight
     // Need to filter out flights occurring in the past

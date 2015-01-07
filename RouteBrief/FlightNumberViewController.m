@@ -11,6 +11,8 @@
 #import "CurrentWxViewController.h"
 #import "FlightAwareCaller.h"
 #import "NearestAirportsViewController.h"
+#import "ChooseAirlineViewController.h"
+#import "SearchResultsController.h"
 
 @interface FlightNumberViewController () <UITextFieldDelegate, UIPickerViewDelegate>
 
@@ -19,12 +21,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *currentWxButton;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, weak) UITextField *activeField;
-
+@property (weak, nonatomic) IBOutlet UIButton *chooseAirlineButton;
 
 @end
 
 @implementation FlightNumberViewController
-
 
 - (void)viewDidLoad {
     
@@ -37,7 +38,6 @@
     self.navigationController.navigationBarHidden = YES;
     _fnLabel.delegate = self;
     [self registerForKeyboardNotifications];
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -77,16 +77,37 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"scheduledFlights"]) {
+        
         ScheduleViewController *svc = segue.destinationViewController;
-        svc.fn = _fnLabel.text;
-        NSLog(@"_fnLabel.text: %@", _fnLabel.text);
-        NSLog(@"svc.fn: %@", svc.fn);
+        svc.fn = [NSString stringWithFormat:@"%@%@", self.ICAO, _fnLabel.text];
+        
     } else if ([segue.identifier isEqualToString:@"currentWxBrief"]) {
         UINavigationController *navController = segue.destinationViewController;
         NearestAirportsViewController *nvc = (NearestAirportsViewController *)navController.topViewController;
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [nvc.fac startLocation];
+        });
+    }
+}
+
+#pragma mark - Unwind Segue
+
+- (IBAction)unwindToFlightNumberViewController:(UIStoryboardSegue *)segue
+{
+    if ([segue.identifier isEqualToString:@"ChooseAirlineCode"]) {
+        
+        ChooseAirlineViewController *cvc = segue.sourceViewController;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.ICAO = [cvc.selectedAirline substringFromIndex:[cvc.selectedAirline length] - 3];
+            [self.chooseAirlineButton setTitle:cvc.selectedAirline forState:normal];
+        });
+    } else if ([segue.identifier isEqualToString:@"SearchAirlineCode"]) {
+        
+        SearchResultsController *src = segue.sourceViewController;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.ICAO = [src.selectedAirline substringFromIndex:[src.selectedAirline length] - 3];
+            [self.chooseAirlineButton setTitle:src.selectedAirline forState:normal];
         });
     }
 }
@@ -100,7 +121,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
-    
 }
 
 - (void)keyboardWasShown:(NSNotification*)aNotification

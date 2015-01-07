@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+//typedef void(^CallbackBlock)(id var);
+
 @interface ChooseAirlineViewController : UITableViewController
+
+@property (strong, nonatomic) NSString *selectedAirline;
 
 @end

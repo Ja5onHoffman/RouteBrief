@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-
 @interface FlightNumberViewController : UIViewController <UINavigationControllerDelegate>
 
+@property (nonatomic, strong) NSString *ICAO;
 
 @end

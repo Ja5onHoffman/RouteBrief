@@ -8,6 +8,7 @@
 
 #import "WeatherViewController.h"
 #import "FlightAwareCaller.h"
+#import "FlightStatsCaller.h"
 #import "WeatherDetailViewController.h"
 
 @interface WeatherViewController () <FlightAwareCallerDelegate>
@@ -17,6 +18,7 @@
 @property (weak, nonatomic) __block IBOutlet UITableViewCell *destinationCell;
 
 @property (nonatomic, strong) FlightAwareCaller *fac;
+@property (nonatomic, strong) FlightStatsCaller *fsc;
 @property (weak, nonatomic) IBOutlet UITextField *alternateTextField;
 
 @end
@@ -25,21 +27,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _fac = [[FlightAwareCaller alloc] init];
-    _originCell.textLabel.text = self.origin;
-    _destinationCell.textLabel.text = self.destination;
+    self.fsc = [[FlightStatsCaller alloc] init];
+    self.originCell.textLabel.text = self.origin;
+    self.destinationCell.textLabel.text = self.destination;
     
-    [_fac getMetarForAirport:self.origin completionHandler:^(NSString *results, NSError *error){
+    /*
+    [self.fsc getWeatherForAirport:self.origin completionHandler:^(NSString *results, NSError *error){
        dispatch_async(dispatch_get_main_queue(), ^(void){
-           _originCell.detailTextLabel.text = results;
-        });
+         
+       });
     }];
 
-    [_fac getMetarForAirport:self.destination completionHandler:^(NSString *results, NSError *error){
+    [self.fsc getWeatherForAirport:self.destination completionHandler:^(NSString *results, NSError *error){
         dispatch_async(dispatch_get_main_queue(), ^(void){
-            _destinationCell.detailTextLabel.text = results;
+       //self.destinationCell.detailTextLabel.text = results;
         });
-    }];
+    }]; */
     
     
     self.navigationController.navigationBarHidden = NO;
@@ -64,7 +67,6 @@
             wdc.codeTaf.text = [NSString stringWithFormat:@"%@ TAF", cell.textLabel.text];
             
             wdc.metarText = cell.detailTextLabel.text;
-            
             
             [_fac getTafForAirport:cell.textLabel.text
                  completionHandler:^(NSString *results, NSError *error) {

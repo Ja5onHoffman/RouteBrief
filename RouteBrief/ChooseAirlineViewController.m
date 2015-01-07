@@ -8,17 +8,16 @@
 
 #import "ChooseAirlineViewController.h"
 #import "SearchResultsController.h"
-#import "Airlines.h"
-#import "Airline.h"
+#import "FlightStatsCaller.h"
 
 @interface ChooseAirlineViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 
-@property (nonatomic, strong) NSMutableArray *airlines;
-//@property (nonatomic, strong) Airline *airlineModel;
+@property (nonatomic, strong) __block NSArray *airlines;
 @property (strong, nonatomic) IBOutlet UITableView *searchBar;
 @property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) NSMutableArray *searchResults;
 @property (strong, nonatomic) NSMutableArray *searchText;
+@property (weak, nonatomic) IBOutlet UINavigationItem *navBar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
 
@@ -28,15 +27,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"airlineData" ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:filePath];
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-    self.airlines = [dictionary objectForKey:@"airlines"];
+    NSLog(@"self.presentingViewController %@", self.presentingViewController);
     
     UINavigationController *searchResultsController = [[self storyboard] instantiateViewControllerWithIdentifier:@"TableSearchResultsNavigationController"];
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:searchResultsController];
     
+    FlightStatsCaller *fsc = [FlightStatsCaller sharedFlightStatsCaller];
+    [fsc getActiveAirlinesWithCompHandler:^(NSArray *ar) {
+        self.airlines = ar;
+        NSLog(@"self.airlines %@", self.airlines);
+        
+        [self.tableView reloadData];
+    }];
+
     self.searchController.delegate = self;
     self.searchController.searchBar.delegate = self;
     self.searchController.searchResultsUpdater = self;
@@ -48,7 +51,6 @@
     
     NSArray *scopeButtonTitles = @[@"US Airlines", @"All Airlines"];
     self.searchController.searchBar.scopeButtonTitles = scopeButtonTitles;
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -56,17 +58,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)doneButtonClicked:(id)sender {
-    // For now
-    [self dismissViewControllerAnimated:YES completion:^{
-        NSLog(@"Done button");
-    }];
-}
-
 - (IBAction)cancelButtonClicked:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
 
 #pragma mark - Table View Data Source
 
@@ -78,10 +72,21 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AirlineName" forIndexPath:indexPath];
+    NSString *cellText = [NSString stringWithFormat:@"%@ - %@", [self.airlines[indexPath.row] objectForKey:@"name"], [self.airlines[indexPath.row] objectForKey:@"icao"]];
     
-    cell.textLabel.text = [self.airlines[indexPath.row] objectForKey:@"Name"];
+    cell.textLabel.text = cellText;
 
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"selected");
+        
+    self.selectedAirline = [NSString stringWithFormat:@"%@ - %@", [self.airlines[indexPath.row] objectForKey:@"name"], [self.airlines[indexPath.row] objectForKey:@"icao"]];
+    
+    [self performSegueWithIdentifier:@"ChooseAirlineCode" sender:self];
+    NSLog(@"self.selectedAirline %@", self.selectedAirline);
 }
 
 #pragma mark - UISearchControllerDelegate & UISearchResultsDelegate
@@ -90,22 +95,43 @@
 {
     NSString *searchString = self.searchController.searchBar.text;
     
+    [self updateFilteredContentForAirlineName:searchString];
+    
     if (self.searchController.searchResultsController) {
         UINavigationController *navController = (UINavigationController *)self.searchController.searchResultsController;
         
         SearchResultsController *vc = (SearchResultsController *)navController.topViewController;
-       // vc.searchResults = self.searchResults;
+        vc.searchResults = self.searchResults;
         [vc.tableView reloadData];
     }
-
 }
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+- (void)updateFilteredContentForAirlineName:(NSString *)airlineName
+{
+    
+    if (airlineName == nil) {
+        self.searchResults = [self.airlines mutableCopy];
+    } else {
+        
+        NSMutableArray *searchResults = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *airline in self.airlines) {
+            if ([airline[@"name"] containsString:airlineName] || [airline[@"icao"] containsString:[airlineName uppercaseString]]) {
+                NSString *str = [NSString stringWithFormat:@"%@ - %@", airline[@"name"], airline[@"icao"]];
+                [searchResults addObject:str];
+            }
+            
+            self.searchResults = searchResults;
+        }
+    }
+}
+
+
+#pragma mark - Segue
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     
 }
-
-
-
 
 @end
