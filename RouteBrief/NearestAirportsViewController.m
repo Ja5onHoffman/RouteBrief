@@ -8,6 +8,7 @@
 
 #import "NearestAirportsViewController.h"
 #import "CurrentWxViewController.h"
+#import "CustomCellBackground.h"
 
 @interface NearestAirportsViewController ()
 
@@ -58,8 +59,16 @@
     
     // Error because <null> at end of array
     cell.textLabel.text = self.airports[indexPath.row];
+    cell.backgroundView = [[CustomCellBackground alloc] init];
+    cell.selectedBackgroundView = [[CustomCellBackground alloc] init];
     
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *title = @"Nearest Airports";
+    return title;
 }
 
 - (void)setAirports:(NSNotification *)note

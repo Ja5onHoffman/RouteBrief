@@ -11,6 +11,7 @@
 #import "FlightAwareCaller.h"
 #import "WeatherViewController.h"
 #import "CustomCellBackground.h"
+#import "CustomHeader.h"
 #import "HudView.h"
 
 
@@ -46,6 +47,7 @@
     HudView *hudView = [HudView hudInView:self.navigationController.view animated:YES];
     
     self.navigationController.navigationBarHidden = NO;
+    
     _fac.delegate = self;
     
     void (^compHandler)(NSDictionary *, NSError *) = ^(NSDictionary *results, NSError *error) {
@@ -105,9 +107,31 @@
     
     cell.detailTextLabel.text = [_formatter stringFromDate:date];
     cell.textLabel.text = [NSString stringWithFormat:@"%@ to %@", _origin, _destination];
+    
 
     return cell;
 }
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    CustomHeader *header = [[CustomHeader alloc] init];
+    header.titleLabel.text = @"Scheduled Flights";
+    
+    return header;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *title = @"Scheduled Flights";
+    
+    return title;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 50;
+}
+
 
 #pragma mark - Navigation
 
