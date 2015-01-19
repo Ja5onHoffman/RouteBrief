@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "FlightAwareCaller.h"
+#import "FlightStatsCaller.h"
 
 @interface NearestAirportsViewController : UITableViewController <FlightAwareCallerDelegate>
 
 @property (nonatomic, strong) FlightAwareCaller *fac;
+@property (nonatomic, strong) FlightStatsCaller *fsc;
 @property (nonatomic, strong) NSArray *airports;
 
 @end

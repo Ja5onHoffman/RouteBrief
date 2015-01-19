@@ -108,7 +108,6 @@
 
 - (void)updateFilteredContentForAirlineName:(NSString *)airlineName
 {
-    
     if (airlineName == nil) {
         self.searchResults = [self.airlines mutableCopy];
     } else {

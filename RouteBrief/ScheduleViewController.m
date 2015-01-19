@@ -48,6 +48,9 @@
     
     self.navigationController.navigationBarHidden = NO;
     
+    UIColor *navColor = [UIColor colorWithRed:52.0f/255.0f green:60.0f/255.0f blue:69.0f/255.0f alpha:1.0];
+    self.navigationController.navigationBar.backgroundColor = navColor;
+    
     _fac.delegate = self;
     
     void (^compHandler)(NSDictionary *, NSError *) = ^(NSDictionary *results, NSError *error) {
@@ -115,7 +118,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     CustomHeader *header = [[CustomHeader alloc] init];
-    header.titleLabel.text = @"Scheduled Flights";
+    header.titleLabel.text = [self tableView:tableView titleForHeaderInSection:section];
     
     return header;
 }

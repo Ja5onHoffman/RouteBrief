@@ -9,8 +9,9 @@
 #import "NearestAirportsViewController.h"
 #import "CurrentWxViewController.h"
 #import "CustomCellBackground.h"
+#import "CustomHeader.h"
 
-@interface NearestAirportsViewController ()
+@interface NearestAirportsViewController () <FlightStatsCallerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
@@ -24,8 +25,11 @@
     
     if (self) {
         NSLog(@"NearestAirportsViewController init");
-        _fac = [[FlightAwareCaller alloc] init];
+        
+        self.fac = [[FlightAwareCaller alloc] init];
         self.fac.delegate = self;
+        self.fsc = [[FlightStatsCaller alloc] init];
+        self.fsc.delegate = self;
         _spinner.hidden = NO;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setAirports:) name:@"locationUpdated" object:nil];
         
@@ -39,7 +43,7 @@
     [super viewDidLoad];
     NSLog(@"NearestAirportsViewController viewDidLoad");
     
-    
+ 
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,6 +56,14 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSLog(@"airports count %lu", [_airports count]);
     return [_airports count];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    CustomHeader *header = [[CustomHeader alloc] init];
+    header.titleLabel.text = [self tableView:tableView titleForHeaderInSection:section];
+    
+    return header;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -74,6 +86,7 @@
 - (void)setAirports:(NSNotification *)note
 {
     NSLog(@"setAirports");
+    
     [self.fac querySITAwithCompletionHandler:^(NSArray *nearestAirports, NSError *error) {
         NSRange range = NSMakeRange(0, nearestAirports.count - 1);
         _airports = [nearestAirports objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
@@ -81,6 +94,8 @@
         _spinner.hidden = YES;
         [self.tableView reloadData];
     }];
+    
+    
 }
 
 #pragma mark - Navigation
@@ -92,11 +107,16 @@
     
     cwc.currentAirport = _airports[indexPath.row];
     
+    [self.fsc getWeatherForAirport:cwc.currentAirport];
+    
+    /* >>Replacing FlightAwareCaller with FlightStatsCaller
+     * TEST
+     
     [_fac getMetarForAirport:cwc.currentAirport completionHandler:^(NSString *results, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^(void){
             cwc.metarCell.textLabel.text = results;
         });
-    }];
+    }]; */
     
     [_fac getTafForAirport:cwc.currentAirport completionHandler:^(NSString *results, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^(void){
