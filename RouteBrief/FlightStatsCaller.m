@@ -13,9 +13,9 @@
 
 
 // Still active airlines - need to change to base url
-static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex/airlines/rest/v1/json/active?appId=0726c1bf&appKey=e4fe2b66fbd0d317a96266a9ec555522";
+static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex/airlines/rest/";
 
-static NSString * const FlightStatsWeatherPackageURL = @"https://api.flightstats.com/flex/weather/rest/v1/json/all/DFW?appId=0726c1bf&appKey=e4fe2b66fbd0d317a96266a9ec555522";
+static NSString * const FlightStatsWeatherPackageURL = @"https://api.flightstats.com/flex/weather/rest/v1/json/all/";
 
 @interface FlightStatsCaller ()
 
@@ -70,8 +70,12 @@ static NSString * const FlightStatsWeatherPackageURL = @"https://api.flightstats
 - (NSDictionary *)getWeatherForAirport:(NSString *)airport
 {
     NSDictionary *dummyDict = [[NSDictionary alloc] init];
-    [self GET:FlightStatsWeatherPackageURL parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        
+    
+    [self.requestSerializer setValue:FLIGHT_STATS_API_KEY forHTTPHeaderField:@"appKey"];
+    [self.requestSerializer setValue:FLIGHT_STATS_APP_ID forHTTPHeaderField:@"appId"];
+    
+    [self GET:[NSString stringWithFormat:@"%@%@", FlightStatsWeatherPackageURL, airport] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSLog(@"responseObject %@", responseObject);
         NSDictionary *weatherPackage = responseObject;
         NSLog(@"weatherPackage %@", [[weatherPackage objectForKey:@"metar"] objectForKey:@"report"]);
         
