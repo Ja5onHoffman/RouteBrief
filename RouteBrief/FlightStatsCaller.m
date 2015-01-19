@@ -69,16 +69,18 @@ static NSString * const FlightStatsWeatherPackageURL = @"https://api.flightstats
 // AFNetworking
 - (NSDictionary *)getWeatherForAirport:(NSString *)airport
 {
-    NSDictionary *weatherPackage = [[NSDictionary alloc] init];
-    
+    NSDictionary *dummyDict = [[NSDictionary alloc] init];
     [self GET:FlightStatsWeatherPackageURL parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSLog(@"responseObject %@", responseObject);
+        
+        NSDictionary *weatherPackage = responseObject;
+        NSLog(@"weatherPackage %@", [[weatherPackage objectForKey:@"metar"] objectForKey:@"report"]);
+        
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"There was an error");
     }];
     
-    return weatherPackage;
+    return dummyDict;
 }
 
 @end
