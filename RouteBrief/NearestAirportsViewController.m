@@ -100,29 +100,20 @@
 
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     CurrentWxViewController *cwc = segue.destinationViewController;
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     
-    cwc.currentAirport = _airports[indexPath.row];
+    cwc.currentAirport = self.airports[indexPath.row];
     
-    [self.fsc getWeatherForAirport:cwc.currentAirport];
-    
-    /* >>Replacing FlightAwareCaller with FlightStatsCaller
-     * TEST
-     
-    [_fac getMetarForAirport:cwc.currentAirport completionHandler:^(NSString *results, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            cwc.metarCell.textLabel.text = results;
-        });
-    }]; */
-    
-    [_fac getTafForAirport:cwc.currentAirport completionHandler:^(NSString *results, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            cwc.tafCell.textLabel.text = results;
+    [self.fsc getWeatherForAirport:cwc.currentAirport completionHandler:^(NSDictionary *results, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            cwc.metarCell.textLabel.text = [[results objectForKey:@"metar"] objectForKey:@"report"];
+            cwc.tafCell.textLabel.text = [[results objectForKey:@"metar"] objectForKey:@"report"];
         });
     }];
+    
+    
 }
 
 @end

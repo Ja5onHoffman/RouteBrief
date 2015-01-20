@@ -14,7 +14,7 @@
 
 @optional
 
-- (NSDictionary *)getWeatherForAirport:(NSString *)airport;
+- (void)getWeatherForAirport:(NSString *)airport completionHandler:(void (^)(NSDictionary *results, NSError *error))completionHandler;
 
 @end
 
@@ -23,7 +23,7 @@
 + (FlightStatsCaller *)sharedFlightStatsCaller;
 - (instancetype)initWithBaseURL:(NSURL *)url;
 - (void)getActiveAirlinesWithCompHandler:(void (^)(NSArray *ar))completionHandler;
-- (NSDictionary *)getWeatherForAirport:(NSString *)airport;
+- (void)getWeatherForAirport:(NSString *)airport completionHandler:(void (^)(NSDictionary *results, NSError *error))completionHandler;
 
 @property (nonatomic, weak) id<FlightStatsCallerDelegate> delegate;
 

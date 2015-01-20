@@ -67,24 +67,22 @@ static NSString * const FlightStatsWeatherPackageURL = @"https://api.flightstats
 }
 
 // AFNetworking
-- (NSDictionary *)getWeatherForAirport:(NSString *)airport
+- (void)getWeatherForAirport:(NSString *)airport completionHandler:(void (^)(NSDictionary *results, NSError *error))completionHandler
 {
-    NSDictionary *dummyDict = [[NSDictionary alloc] init];
+    __block NSDictionary *weatherPackage = [[NSDictionary alloc] init];
+    NSError *error;
     
     [self.requestSerializer setValue:FLIGHT_STATS_API_KEY forHTTPHeaderField:@"appKey"];
     [self.requestSerializer setValue:FLIGHT_STATS_APP_ID forHTTPHeaderField:@"appId"];
     
     [self GET:[NSString stringWithFormat:@"%@%@", FlightStatsWeatherPackageURL, airport] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSLog(@"responseObject %@", responseObject);
-        NSDictionary *weatherPackage = responseObject;
-        NSLog(@"weatherPackage %@", [[weatherPackage objectForKey:@"metar"] objectForKey:@"report"]);
         
+        weatherPackage = responseObject;
+        completionHandler(weatherPackage, error);
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"There was an error");
     }];
-    
-    return dummyDict;
 }
 
 @end
