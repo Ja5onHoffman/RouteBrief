@@ -7,13 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "FlightAwareCaller.h"
 #import "FlightStatsCaller.h"
 
-@interface NearestAirportsViewController : UITableViewController <FlightAwareCallerDelegate>
+@interface NearestAirportsViewController : UITableViewController <FlightAwareCallerDelegate, CLLocationManagerDelegate>
 
 @property (nonatomic, strong) FlightAwareCaller *fac;
 @property (nonatomic, strong) FlightStatsCaller *fsc;
-@property (nonatomic, strong) NSArray *airports;
+@property (nonatomic, strong) __block NSMutableArray *airports;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end

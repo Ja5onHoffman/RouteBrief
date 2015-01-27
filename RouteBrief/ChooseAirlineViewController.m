@@ -35,7 +35,6 @@
     FlightStatsCaller *fsc = [FlightStatsCaller sharedFlightStatsCaller];
     [fsc getActiveAirlinesWithCompHandler:^(NSArray *ar) {
         self.airlines = ar;
-        NSLog(@"self.airlines %@", self.airlines);
         
         [self.tableView reloadData];
     }];
@@ -49,8 +48,10 @@
     self.searchController.searchBar.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), 44);
     self.tableView.tableHeaderView = self.searchController.searchBar;
     
+    /* Consider adding scope buttons
+     *
     NSArray *scopeButtonTitles = @[@"US Airlines", @"All Airlines"];
-    self.searchController.searchBar.scopeButtonTitles = scopeButtonTitles;
+    self.searchController.searchBar.scopeButtonTitles = scopeButtonTitles; */
 }
 
 - (void)didReceiveMemoryWarning {
@@ -84,9 +85,9 @@
     NSLog(@"selected");
         
     self.selectedAirline = [NSString stringWithFormat:@"%@ - %@", [self.airlines[indexPath.row] objectForKey:@"name"], [self.airlines[indexPath.row] objectForKey:@"icao"]];
+    self.icao = [self.airlines[indexPath.row] objectForKey:@"icao"];
     
     [self performSegueWithIdentifier:@"ChooseAirlineCode" sender:self];
-    NSLog(@"self.selectedAirline %@", self.selectedAirline);
 }
 
 #pragma mark - UISearchControllerDelegate & UISearchResultsDelegate

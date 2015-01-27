@@ -23,7 +23,8 @@
 + (FlightStatsCaller *)sharedFlightStatsCaller;
 - (instancetype)initWithBaseURL:(NSURL *)url;
 - (void)getActiveAirlinesWithCompHandler:(void (^)(NSArray *ar))completionHandler;
-- (void)getWeatherForAirport:(NSString *)airport completionHandler:(void (^)(NSDictionary *results, NSError *error))completionHandler;
+- (void)retrieveProduct:(NSString *)product forAirport:(NSString *)airport completionHandler:(void(^)(NSDictionary *resp))completionHandler;
+- (void)retrieveAirportsNearLon:(float)lon andLat:(float)lat completionHandler:(void(^)(NSDictionary *resp))completionHandler;
 
 @property (nonatomic, weak) id<FlightStatsCallerDelegate> delegate;
 

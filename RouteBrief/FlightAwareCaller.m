@@ -44,8 +44,7 @@
     NSURLSessionDataTask *dataTask = [_urlSession dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
         NSString *resultString = [jsonObject objectForKey:@"MetarResult"];
-        NSLog(@"metar resultstring %@", resultString);
-        NSLog(@"metar resultstring length %lu", [resultString length]);
+        
         completionHandler(resultString, error);
     }];
     
@@ -69,8 +68,7 @@
         NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
         NSLog(@"jsonObject %@", jsonObject);
         NSString *resultString = [[jsonObject objectForKey:@"TafResult"] substringFromIndex:17];
-        NSLog(@"taf resultString %@", resultString);
-        NSLog(@"taf resultString length %lu", [resultString length]);
+
         completionHandler(resultString, error);
     }];
     
@@ -173,6 +171,7 @@
     [_locationManager startUpdatingLocation];
 }
 
+/*
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     NSLog(@"didUpdateLocation");
     // If it's a relatively recent event, turn off updates to save power.
@@ -186,6 +185,6 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"locationUpdated" object:nil];
     [self.locationManager stopUpdatingLocation];
-}
+} */
 
 @end

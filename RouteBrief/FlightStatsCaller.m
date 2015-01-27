@@ -8,19 +8,16 @@
 
 #import "FlightStatsCaller.h"
 
-#define FLIGHT_STATS_APP_ID @"0726c1bf"
-#define FLIGHT_STATS_API_KEY @"e4fe2b66fbd0d317a96266a9ec555522"
-
-
 // Still active airlines - need to change to base url
-static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex/airlines/rest/";
-
-static NSString * const FlightStatsWeatherPackageURL = @"https://api.flightstats.com/flex/weather/rest/v1/json/all/";
+static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex";
 
 @interface FlightStatsCaller ()
 
+@property (nonatomic, strong) NSString *appID;
+@property (nonatomic ,strong) NSString *appKey;
 
 @end
+
 
 @implementation FlightStatsCaller
 
@@ -30,6 +27,8 @@ static NSString * const FlightStatsWeatherPackageURL = @"https://api.flightstats
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+
+        
         _sharedFlightStatsCaller = [[self alloc] initWithBaseURL:[NSURL URLWithString:FlightStatsBaseURL]];
     });
     
@@ -41,6 +40,13 @@ static NSString * const FlightStatsWeatherPackageURL = @"https://api.flightstats
     self = [super initWithBaseURL:url];
     
     if (self) {
+        
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"keys" ofType:@"plist"];
+        NSDictionary *keys = [NSDictionary dictionaryWithContentsOfFile:path];
+        
+        self.appID = [keys objectForKey:@"appID"];
+        self.appKey = [keys objectForKey:@"appKey"];
+        
         self.responseSerializer = [AFJSONResponseSerializer serializer];
         self.requestSerializer = [AFJSONRequestSerializer serializer];
     }
@@ -52,7 +58,13 @@ static NSString * const FlightStatsWeatherPackageURL = @"https://api.flightstats
 {
     __block NSArray *airlines = [[NSArray alloc] init];
     
-    [self GET:FlightStatsBaseURL parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self.requestSerializer setValue:self.appKey forHTTPHeaderField:@"appKey"];
+    [self.requestSerializer setValue:self.appID forHTTPHeaderField:@"appId"];
+    
+    NSString *url = [NSString stringWithFormat:@"%@/%@/%@", FlightStatsBaseURL, @"airlines/rest/v1/json", @"active"];
+    NSLog(@"url %@", url);
+    
+    [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSSortDescriptor *sortByName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
         NSArray *sortDescriptors = [NSArray arrayWithObject:sortByName];
@@ -67,18 +79,36 @@ static NSString * const FlightStatsWeatherPackageURL = @"https://api.flightstats
 }
 
 // AFNetworking
-- (void)getWeatherForAirport:(NSString *)airport completionHandler:(void (^)(NSDictionary *results, NSError *error))completionHandler
+- (void)retrieveProduct:(NSString *)product forAirport:(NSString *)airport completionHandler:(void(^)(NSDictionary *resp))completionHandler
 {
-    __block NSDictionary *weatherPackage = [[NSDictionary alloc] init];
-    NSError *error;
     
-    [self.requestSerializer setValue:FLIGHT_STATS_API_KEY forHTTPHeaderField:@"appKey"];
-    [self.requestSerializer setValue:FLIGHT_STATS_APP_ID forHTTPHeaderField:@"appId"];
+    NSString *url = [NSString stringWithFormat:@"%@/%@/%@/%@", FlightStatsBaseURL, @"weather/rest/v1/json", product, airport];
     
-    [self GET:[NSString stringWithFormat:@"%@%@", FlightStatsWeatherPackageURL, airport] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self.requestSerializer setValue:self.appKey forHTTPHeaderField:@"appKey"];
+    [self.requestSerializer setValue:self.appID forHTTPHeaderField:@"appId"];
+    
+    [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
-        weatherPackage = responseObject;
-        completionHandler(weatherPackage, error);
+        completionHandler(responseObject);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+
+        NSLog(@"There was an error");
+    }];
+}
+
+- (void)retrieveAirportsNearLon:(float)lon andLat:(float)lat completionHandler:(void(^)(NSDictionary *resp))completionHandler
+{
+    NSString *url = [NSString stringWithFormat:@"%@/%@/%f/%f/%@", FlightStatsBaseURL, @"airports/rest/v1/json/withinRadius", lon, lat, @"25"];
+    NSLog(@"retreiveAirportsNear");
+    [self.requestSerializer setValue:self.appKey forHTTPHeaderField:@"appKey"];
+    [self.requestSerializer setValue:self.appID forHTTPHeaderField:@"appId"];
+    
+    NSLog(@"url %@", url);
+    
+    [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+
+        completionHandler(responseObject);
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"There was an error");

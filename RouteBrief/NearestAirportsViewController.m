@@ -14,6 +14,8 @@
 @interface NearestAirportsViewController () <FlightStatsCallerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (nonatomic) float lat;
+@property (nonatomic) float lon;
 
 @end
 
@@ -24,15 +26,10 @@
     self = [super initWithCoder:aDecoder];
     
     if (self) {
-        NSLog(@"NearestAirportsViewController init");
-        
-        self.fac = [[FlightAwareCaller alloc] init];
-        self.fac.delegate = self;
         self.fsc = [[FlightStatsCaller alloc] init];
         self.fsc.delegate = self;
-        _spinner.hidden = NO;
+        self.spinner.hidden = NO;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setAirports:) name:@"locationUpdated" object:nil];
-        
     }
     
     return self;
@@ -41,9 +38,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"NearestAirportsViewController viewDidLoad");
-    
- 
 }
 
 - (void)didReceiveMemoryWarning {
@@ -54,8 +48,7 @@
 #pragma mark - Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"airports count %lu", [_airports count]);
-    return [_airports count];
+    return [self.airports count];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -69,7 +62,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"nearbyAirport" forIndexPath:indexPath];
     
-    // Error because <null> at end of array
     cell.textLabel.text = self.airports[indexPath.row];
     cell.backgroundView = [[CustomCellBackground alloc] init];
     cell.selectedBackgroundView = [[CustomCellBackground alloc] init];
@@ -85,17 +77,22 @@
 
 - (void)setAirports:(NSNotification *)note
 {
-    NSLog(@"setAirports");
-    
-    [self.fac querySITAwithCompletionHandler:^(NSArray *nearestAirports, NSError *error) {
-        NSRange range = NSMakeRange(0, nearestAirports.count - 1);
-        _airports = [nearestAirports objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
-        NSLog(@"airports: %@", _airports);
-        _spinner.hidden = YES;
+    NSLog(@"setAirport");
+    [self.fsc retrieveAirportsNearLon:self.lon andLat:self.lat completionHandler:^(NSDictionary *resp) {
+        
+        NSMutableArray *ar = [[NSMutableArray alloc] init];
+        for (NSDictionary *dict in [resp objectForKey:@"airports"]) {
+                if (dict[@"icao"]) {
+                    [ar addObject:dict[@"icao"]];
+                } else {
+                    [ar addObject:dict[@"fs"]];
+                }
+            }
+        
+        self.spinner.hidden = YES;
+        self.airports = ar;
         [self.tableView reloadData];
     }];
-    
-    
 }
 
 #pragma mark - Navigation
@@ -106,15 +103,47 @@
     
     cwc.currentAirport = self.airports[indexPath.row];
     
-    [self.fsc getWeatherForAirport:cwc.currentAirport completionHandler:^(NSDictionary *results, NSError *error) {
+    [self.fsc retrieveProduct:@"all" forAirport:cwc.currentAirport completionHandler:^(NSDictionary *resp) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            cwc.metarCell.textLabel.text = [[results objectForKey:@"metar"] objectForKey:@"report"];
-            cwc.tafCell.textLabel.text = [[results objectForKey:@"metar"] objectForKey:@"report"];
+            cwc.metarCell.textLabel.text = [[resp objectForKey:@"metar"] objectForKey:@"report"];
+            cwc.tafCell.textLabel.text = [[resp objectForKey:@"metar"] objectForKey:@"report"];
         });
     }];
     
     
 }
+
+#pragma mark - Location Manager
+
+/************************************************************************************
+ *
+ *   Use CLLocationCoordinate2D and CLPlacemark in code instead of .latitude, etc.
+ *
+ ************************************************************************************/
+
+- (void)startLocation
+{
+    if (nil == self.locationManager) {
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+    }
+    
+    [self.locationManager requestWhenInUseAuthorization];
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    // If it's a relatively recent event, turn off updates to save power.
+    CLLocation* location = [locations lastObject];
+    
+    self.lat = location.coordinate.latitude;
+    self.lon = location.coordinate.longitude;
+    
+    [self.locationManager stopUpdatingLocation];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"locationUpdated" object:nil];
+}
+
 
 @end
 

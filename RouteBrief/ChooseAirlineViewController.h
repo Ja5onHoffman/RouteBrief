@@ -13,5 +13,6 @@
 @interface ChooseAirlineViewController : UITableViewController
 
 @property (strong, nonatomic) NSString *selectedAirline;
+@property (strong, nonatomic) NSString *icao;
 
 @end

@@ -41,7 +41,7 @@
     [super viewDidLoad];
     NSLog(@"ScheduleViewController viewDidLoad");
     
-    _fac = [[FlightAwareCaller alloc] init];
+    self.fac = [[FlightAwareCaller alloc] init];
     _formatter = [[NSDateFormatter alloc] init];
     
     HudView *hudView = [HudView hudInView:self.navigationController.view animated:YES];
@@ -51,7 +51,7 @@
     UIColor *navColor = [UIColor colorWithRed:52.0f/255.0f green:60.0f/255.0f blue:69.0f/255.0f alpha:1.0];
     self.navigationController.navigationBar.backgroundColor = navColor;
     
-    _fac.delegate = self;
+    self.fac.delegate = self;
     
     void (^compHandler)(NSDictionary *, NSError *) = ^(NSDictionary *results, NSError *error) {
         if (error) {
@@ -70,8 +70,7 @@
     };
     
     if (_flightDataReceived == NO) {
-        [_fac getFlightsForFN:self.fn completionHandler:compHandler];
-        
+        [self.fac getFlightsForFN:self.fn completionHandler:compHandler];
     }
 }
 
@@ -163,7 +162,7 @@
         });
     };
 
-    [_fac getFlightsForFN:self.fn completionHandler:compHandler];
+    [self.fac getFlightsForFN:self.fn completionHandler:compHandler];
 }
 
 @end

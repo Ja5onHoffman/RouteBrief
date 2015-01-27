@@ -12,5 +12,6 @@
 
 @property (nonatomic, strong) NSMutableArray *searchResults;
 @property (nonatomic, strong) NSString *selectedAirline;
+@property (nonatomic, strong) NSString *icao;
 
 @end
