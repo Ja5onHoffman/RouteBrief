@@ -15,7 +15,7 @@
 
 @property (nonatomic, strong) FlightAwareCaller *fac;
 @property (nonatomic, strong) FlightStatsCaller *fsc;
-@property (nonatomic, strong) __block NSMutableArray *airports;
+@property (nonatomic, strong) NSMutableArray *airports;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end

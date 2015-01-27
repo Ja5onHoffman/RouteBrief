@@ -86,7 +86,6 @@
     } else if ([segue.identifier isEqualToString:@"currentWxBrief"]) {
         UINavigationController *navController = segue.destinationViewController;
         NearestAirportsViewController *nvc = (NearestAirportsViewController *)navController.topViewController;
-        nvc.airports = [[NSMutableArray alloc] init];
         [nvc startLocation];
     }
 }

@@ -14,6 +14,7 @@
 @interface NearestAirportsViewController () <FlightStatsCallerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (nonatomic, strong) NSArray *fullResp;
 @property (nonatomic) float lat;
 @property (nonatomic) float lon;
 
@@ -29,7 +30,7 @@
         self.fsc = [[FlightStatsCaller alloc] init];
         self.fsc.delegate = self;
         self.spinner.hidden = NO;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setAirports:) name:@"locationUpdated" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closestAirports:) name:@"locationUpdated" object:nil];
     }
     
     return self;
@@ -75,42 +76,53 @@
     return title;
 }
 
-- (void)setAirports:(NSNotification *)note
+// Used name of setter method and caused infinite loop
+- (void)closestAirports:(NSNotification *)note
 {
-    NSLog(@"setAirport");
+    self.airports = [[NSMutableArray alloc] init];
+    self.fullResp = [[NSArray alloc] init];
+    
     [self.fsc retrieveAirportsNearLon:self.lon andLat:self.lat completionHandler:^(NSDictionary *resp) {
         
-        NSMutableArray *ar = [[NSMutableArray alloc] init];
+        self.fullResp = resp[@"airports"];
+        
         for (NSDictionary *dict in [resp objectForKey:@"airports"]) {
-                if (dict[@"icao"]) {
-                    [ar addObject:dict[@"icao"]];
+            if (dict[@"icao"]) {
+                    [self.airports addObject:dict[@"icao"]];
                 } else {
-                    [ar addObject:dict[@"fs"]];
+                    [self.airports addObject:dict[@"fs"]];
                 }
             }
         
         self.spinner.hidden = YES;
-        self.airports = ar;
         [self.tableView reloadData];
     }];
 }
 
 #pragma mark - Navigation
 
+
+// Use weather URL returned from location call instead of calling again for weather
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     CurrentWxViewController *cwc = segue.destinationViewController;
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     
     cwc.currentAirport = self.airports[indexPath.row];
+    NSString *url = [self.fullResp[indexPath.row] objectForKey:@"weatherUrl"];
     
+    [self.fsc GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSLog(@"segue response %@", responseObject);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"segue response error");
+    }];
+    
+    /*
     [self.fsc retrieveProduct:@"all" forAirport:cwc.currentAirport completionHandler:^(NSDictionary *resp) {
         dispatch_async(dispatch_get_main_queue(), ^{
             cwc.metarCell.textLabel.text = [[resp objectForKey:@"metar"] objectForKey:@"report"];
             cwc.tafCell.textLabel.text = [[resp objectForKey:@"metar"] objectForKey:@"report"];
         });
-    }];
-    
-    
+    }]; */
 }
 
 #pragma mark - Location Manager
