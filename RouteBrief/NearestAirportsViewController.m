@@ -15,6 +15,7 @@
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 @property (nonatomic, strong) NSArray *fullResp;
+@property (nonatomic) BOOL closestAirportsCalled;
 @property (nonatomic) float lat;
 @property (nonatomic) float lon;
 
@@ -25,6 +26,8 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
+    
+    NSLog(@"self.closestAirportsCalled %i", self.closestAirportsCalled);
     
     if (self) {
         self.fsc = [[FlightStatsCaller alloc] init];
@@ -79,24 +82,32 @@
 // Used name of setter method and caused infinite loop
 - (void)closestAirports:(NSNotification *)note
 {
-    self.airports = [[NSMutableArray alloc] init];
-    self.fullResp = [[NSArray alloc] init];
-    
-    [self.fsc retrieveAirportsNearLon:self.lon andLat:self.lat completionHandler:^(NSDictionary *resp) {
+    if (self.closestAirportsCalled == NO) {
+        NSLog(@"closestAirports");
+        self.airports = [[NSMutableArray alloc] init];
+        self.fullResp = [[NSArray alloc] init];
         
-        self.fullResp = resp[@"airports"];
-        
-        for (NSDictionary *dict in [resp objectForKey:@"airports"]) {
-            if (dict[@"icao"]) {
+        [self.fsc retrieveAirportsNearLon:self.lon andLat:self.lat completionHandler:^(NSDictionary *resp) {
+            
+            self.fullResp = resp[@"airports"];
+            
+            for (NSDictionary *dict in [resp objectForKey:@"airports"]) {
+                if (dict[@"icao"]) {
                     [self.airports addObject:dict[@"icao"]];
                 } else {
                     [self.airports addObject:dict[@"fs"]];
                 }
             }
+            
+            self.spinner.hidden = YES;
+            [self.tableView reloadData];
+        }];
         
-        self.spinner.hidden = YES;
-        [self.tableView reloadData];
-    }];
+        self.closestAirportsCalled = YES;
+        
+    } else {
+        NSLog(@"Already called");
+    }
 }
 
 #pragma mark - Navigation
@@ -111,18 +122,15 @@
     NSString *url = [self.fullResp[indexPath.row] objectForKey:@"weatherUrl"];
     
     [self.fsc GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSLog(@"segue response %@", responseObject);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            cwc.metarCell.textLabel.text = [[responseObject objectForKey:@"metar"] objectForKey:@"report"];
+            cwc.tafCell.textLabel.text = [[responseObject objectForKey:@"taf"] objectForKey:@"report"];
+        });
+        
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"segue response error");
     }];
-    
-    /*
-    [self.fsc retrieveProduct:@"all" forAirport:cwc.currentAirport completionHandler:^(NSDictionary *resp) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            cwc.metarCell.textLabel.text = [[resp objectForKey:@"metar"] objectForKey:@"report"];
-            cwc.tafCell.textLabel.text = [[resp objectForKey:@"metar"] objectForKey:@"report"];
-        });
-    }]; */
 }
 
 #pragma mark - Location Manager
@@ -146,14 +154,13 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    // If it's a relatively recent event, turn off updates to save power.
     CLLocation* location = [locations lastObject];
     
     self.lat = location.coordinate.latitude;
     self.lon = location.coordinate.longitude;
     
-    [self.locationManager stopUpdatingLocation];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"locationUpdated" object:nil];
+    [self.locationManager stopUpdatingLocation];
 }
 
 

@@ -8,9 +8,9 @@
 
 #import "FlightAwareCaller.h"
 
-#define FLIGHTAWARE_USERNAME @"jasonandrewhoffman"
-#define FLIGHTAWARE_API_KEY @"0560af20db89ba4b2fba0dbae9d4543e36cfc69a"
-#define SITA_API_KEY @"9f74404fcbde4d74eabe42519efed457"
+#define FLIGHTAWARE_USERNAME @"name"
+#define FLIGHTAWARE_API_KEY @"key"
+#define SITA_API_KEY @"key"
 
 
 @interface FlightAwareCaller ()

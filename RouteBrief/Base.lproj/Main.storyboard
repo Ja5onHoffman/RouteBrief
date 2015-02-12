@@ -24,7 +24,7 @@
         <!--Choose Airline View Controller-->
         <scene sceneID="LFs-Ld-4VH">
             <objects>
-                <tableViewController id="Hph-vq-XR7" customClass="ChooseAirlineViewController" sceneMemberID="viewController">
+                <tableViewController autoresizesArchivedViewToFullSize="NO" id="Hph-vq-XR7" customClass="ChooseAirlineViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="iTq-qL-hkA">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -529,10 +529,10 @@
             </objects>
             <point key="canvasLocation" x="363" y="1063"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Search Results Controller-->
         <scene sceneID="IQi-Ol-32j">
             <objects>
-                <tableViewController id="yKc-AO-MMc" customClass="SearchResultsController" sceneMemberID="viewController">
+                <tableViewController autoresizesArchivedViewToFullSize="NO" id="yKc-AO-MMc" customClass="SearchResultsController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="KJa-P5-nvA">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -550,7 +550,7 @@
                             <outlet property="delegate" destination="yKc-AO-MMc" id="KfG-5b-W0d"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="Zs7-D1-NX8"/>
+                    <navigationItem key="navigationItem" id="Zs7-D1-NX8"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <segue destination="YHf-TM-GCJ" kind="unwind" identifier="SearchAirlineCode" unwindAction="unwindToFlightNumberViewController:" id="k8w-yH-Il9"/>

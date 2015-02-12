@@ -27,7 +27,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"self.presentingViewController %@", self.presentingViewController);
     
     UINavigationController *searchResultsController = [[self storyboard] instantiateViewControllerWithIdentifier:@"TableSearchResultsNavigationController"];
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:searchResultsController];
@@ -42,6 +41,10 @@
     self.searchController.delegate = self;
     self.searchController.searchBar.delegate = self;
     self.searchController.searchResultsUpdater = self;
+    self.searchController.searchResultsController.
+    
+    // Keeps searchbar on screen but not the behavior I want
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     
     // Remember searchBar default height is 0
