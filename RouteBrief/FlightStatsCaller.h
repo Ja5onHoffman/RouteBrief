@@ -25,6 +25,7 @@
 - (void)getActiveAirlinesWithCompHandler:(void (^)(NSArray *ar))completionHandler;
 - (void)retrieveProduct:(NSString *)product forAirport:(NSString *)airport completionHandler:(void(^)(NSDictionary *resp))completionHandler;
 - (void)retrieveAirportsNearLon:(float)lon andLat:(float)lat completionHandler:(void(^)(NSDictionary *resp))completionHandler;
+- (void)retrieveFlightsForFlightNumber:(NSString*)number onDate:(NSDate *)date completionHandler:(void(^)(NSDictionary *resp))completionHandler;
 
 @property (nonatomic, weak) id<FlightStatsCallerDelegate> delegate;
 

@@ -20,8 +20,11 @@
 @property (nonatomic, weak) IBOutlet UITextField *fnLabel;
 @property (weak, nonatomic) IBOutlet UIButton *currentWxButton;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, weak) UITextField *activeField;
+@property (nonatomic, strong) UITextField *activeField;
 @property (weak, nonatomic) IBOutlet UIButton *chooseAirlineButton;
+@property (weak, nonatomic) IBOutlet UITextField *dateField;
+@property (strong, nonatomic) UIDatePicker *datePicker;
+@property (nonatomic ,weak) NSDate *date;
 
 @end
 
@@ -37,9 +40,9 @@
     [self.view addGestureRecognizer:tapGesture];
     self.navigationController.navigationBarHidden = YES;
     self.fnLabel.delegate = self;
+    self.dateField.delegate = self;
+    
     [self registerForKeyboardNotifications];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,10 +55,37 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     _activeField = textField;
+    
+    if (textField == self.dateField) {
+        
+        UIToolbar *doneBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(textFieldDidEndEditing:)];
+        UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        NSArray *barItems = @[space, space, doneButton];
+        doneBar.items = barItems;
+        
+        self.datePicker = [[UIDatePicker alloc] init];
+        [self.datePicker setDatePickerMode:UIDatePickerModeDate];
+
+        [self.datePicker setDate:[NSDate date]];
+        [self.datePicker setMinimumDate:[NSDate date]];
+        textField.inputView = self.datePicker;
+        textField.inputAccessoryView = doneBar;
+        
+        self.date = [self.datePicker date];
+    }
 }
+
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    if (textField == self.dateField || [self.dateField isFirstResponder]) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+
+        self.dateField.text = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.date]];
+        [self.dateField endEditing:YES];
+    }
     
     _activeField = nil;
 }
@@ -82,6 +112,7 @@
                 
         ScheduleViewController *svc = segue.destinationViewController;
         svc.fn = self.fnLabel.text;
+        svc.date = self.date;
         
     } else if ([segue.identifier isEqualToString:@"currentWxBrief"]) {
         UINavigationController *navController = segue.destinationViewController;
@@ -97,7 +128,6 @@
     if ([segue.identifier isEqualToString:@"ChooseAirlineCode"]) {
         
         ChooseAirlineViewController *cvc = segue.sourceViewController;
-        
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.fnLabel.text = @"";

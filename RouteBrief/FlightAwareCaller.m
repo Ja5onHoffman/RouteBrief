@@ -7,6 +7,7 @@
 //
 
 #import "FlightAwareCaller.h"
+#import "AFNetworking.h"
 
 #define FLIGHTAWARE_USERNAME @"name"
 #define FLIGHTAWARE_API_KEY @"key"
@@ -21,11 +22,47 @@
 @property (nonatomic, strong) NSNotificationCenter *notificationCenter;
 @property (nonatomic) float lat;
 @property (nonatomic) float lon;
+@property (nonatomic, strong) NSString *FAKey;
 
 @end
 
 
 @implementation FlightAwareCaller
+
+- (instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"keys" ofType:@"plist"];
+        NSDictionary *keys = [NSDictionary dictionaryWithContentsOfFile:path];
+        
+        self.FAKey = [keys objectForKey:@"FAKey"];
+        
+        self.responseSerializer = [AFJSONResponseSerializer serializer];
+        self.requestSerializer = [AFJSONRequestSerializer serializer];
+        
+   //     [self.requestSerializer setValue:self.FAKey forKey:<#(NSString *)#>]
+        
+        
+        /*
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"keys" ofType:@"plist"];
+        NSDictionary *keys = [NSDictionary dictionaryWithContentsOfFile:path];
+        
+        self.appID = [keys objectForKey:@"appID"];
+        self.appKey = [keys objectForKey:@"appKey"];
+        
+        self.responseSerializer = [AFJSONResponseSerializer serializer];
+        self.requestSerializer = [AFJSONRequestSerializer serializer];
+        
+        [self.requestSerializer setValue:self.appKey forHTTPHeaderField:@"appKey"];
+        [self.requestSerializer setValue:self.appID forHTTPHeaderField:@"appId"]; */
+
+    }
+    
+    return self;
+}
+
 
 - (void)getMetarForAirport:(NSString *)airports completionHandler:(void (^)(NSString *results, NSError *error))completionHandler
 {

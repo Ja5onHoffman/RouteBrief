@@ -8,19 +8,19 @@
 
 #import "ScheduleViewController.h"
 #import "FlightNumberViewController.h"
-#import "FlightAwareCaller.h"
+#import "FlightStatsCaller.h"
 #import "WeatherViewController.h"
 #import "CustomCellBackground.h"
 #import "CustomHeader.h"
 #import "HudView.h"
 
 
-@interface ScheduleViewController () <FlightAwareCallerDelegate>
+@interface ScheduleViewController () <FlightStatsCallerDelegate>
 
 @property (nonatomic, strong) __block NSArray *scheduledFlights;
 @property (nonatomic, weak) NSString *origin;
 @property (nonatomic, weak) NSString *destination;
-@property (nonatomic, strong) FlightAwareCaller *fac;
+@property (nonatomic, strong) FlightStatsCaller *fsc;
 @property (nonatomic, strong) NSDateFormatter *formatter;
 
 @end
@@ -41,7 +41,7 @@
     [super viewDidLoad];
     NSLog(@"ScheduleViewController viewDidLoad");
     
-    self.fac = [[FlightAwareCaller alloc] init];
+    self.fsc = [[FlightStatsCaller alloc] init];
     _formatter = [[NSDateFormatter alloc] init];
     
     HudView *hudView = [HudView hudInView:self.navigationController.view animated:YES];
@@ -51,8 +51,9 @@
     UIColor *navColor = [UIColor colorWithRed:52.0f/255.0f green:60.0f/255.0f blue:69.0f/255.0f alpha:1.0];
     self.navigationController.navigationBar.backgroundColor = navColor;
     
-    self.fac.delegate = self;
+    self.fsc.delegate = self;
     
+    /*
     void (^compHandler)(NSDictionary *, NSError *) = ^(NSDictionary *results, NSError *error) {
         if (error) {
             NSLog(@"There was an error");
@@ -67,10 +68,14 @@
         }
         
         [self.tableView reloadData];
-    };
+    }; */
     
+    // Need datePicker
     if (_flightDataReceived == NO) {
-        [self.fac getFlightsForFN:self.fn completionHandler:compHandler];
+        [self.fsc retrieveFlightsForFlightNumber:self.fn onDate:self.date completionHandler:^(NSDictionary *resp) {
+            NSLog(@"%@", resp);
+    }];
+        
     }
 }
 
@@ -162,7 +167,7 @@
         });
     };
 
-    [self.fac getFlightsForFN:self.fn completionHandler:compHandler];
+    //[self.fsc getFlightsForFN:self.fn
 }
 
 @end

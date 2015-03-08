@@ -24,7 +24,7 @@
 @end
 
 
-@interface FlightAwareCaller : NSObject <NSURLSessionDataDelegate, CLLocationManagerDelegate>
+@interface FlightAwareCaller : AFHTTPSessionManager <NSURLSessionDataDelegate, CLLocationManagerDelegate>
 
 @property (nonatomic, weak) __block NSString *weather;
 @property (nonatomic, weak) __block NSArray *flights;

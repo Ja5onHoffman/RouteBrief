@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="tST-rV-8k9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="tST-rV-8k9">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
@@ -58,6 +58,7 @@
                     <connections>
                         <outlet property="cancelButton" destination="k7z-vT-0Ji" id="9uC-Zi-pFw"/>
                         <outlet property="doneButton" destination="xa3-Rn-Arl" id="hM0-Ik-y1k"/>
+                        <outlet property="navBar" destination="GcP-oe-6Be" id="6yD-8J-twA"/>
                         <outlet property="searchBar" destination="iTq-qL-hkA" id="RWB-OB-i4Q"/>
                         <outlet property="searchDisplayController" destination="jzR-O6-Z0Y" id="fAS-bh-ZN4"/>
                         <segue destination="azL-OA-jPM" kind="unwind" identifier="ChooseAirlineCode" unwindAction="unwindToFlightNumberViewController:" id="9bg-2A-gJI"/>
@@ -109,13 +110,8 @@
                                             <segue destination="IGB-ec-Jkx" kind="show" identifier="scheduledFlights" id="I1O-6F-Q2V"/>
                                         </connections>
                                     </button>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Flight Number" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="wIb-t1-l9F">
-                                        <rect key="frame" x="55" y="274" width="200" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
-                                    </textField>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kXW-qJ-px0">
-                                        <rect key="frame" x="55" y="227" width="200" height="30"/>
+                                        <rect key="frame" x="55" y="207" width="200" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Choose Airline Code">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -125,11 +121,21 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Enter Flight Number" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oSe-s8-8zh">
-                                        <rect key="frame" x="66" y="198" width="179" height="21"/>
+                                        <rect key="frame" x="66" y="178" width="179" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Flight Number" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="wIb-t1-l9F">
+                                        <rect key="frame" x="55" y="245" width="200" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Date" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L0M-Ky-ByU">
+                                        <rect key="frame" x="55" y="283" width="200" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -141,6 +147,7 @@
                     <connections>
                         <outlet property="chooseAirlineButton" destination="kXW-qJ-px0" id="ac4-5Z-OD7"/>
                         <outlet property="currentWxButton" destination="Rw3-kq-AYY" id="afg-qt-Bg3"/>
+                        <outlet property="dateField" destination="L0M-Ky-ByU" id="p6I-Pv-PfV"/>
                         <outlet property="fnLabel" destination="wIb-t1-l9F" id="9AI-fM-GnY"/>
                         <outlet property="scrollView" destination="aw1-JD-22g" id="hA0-sy-N6s"/>
                     </connections>

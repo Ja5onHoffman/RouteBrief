@@ -78,6 +78,21 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     
 }
 
+- (void)retrieveFlightsForFlightNumber:(NSString *)number onDate:(NSDate *)date completionHandler:(void (^)(NSDictionary *))completionHandler
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy/MM/dd"];
+    NSString *dateString = [NSString stringWithFormat:@"dep/%@", [dateFormatter stringFromDate:date]];
+
+    NSString *url = [NSString stringWithFormat:@"%@/%@/%@/%@", FlightStatsBaseURL, @"flightstatus/rest/v2/json/flight/status", number, dateString];
+    
+    [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        completionHandler(responseObject);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"There was an error");
+    }];
+}
+
 // AFNetworking
 - (void)retrieveProduct:(NSString *)product forAirport:(NSString *)airport completionHandler:(void(^)(NSDictionary *resp))completionHandler
 {

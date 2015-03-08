@@ -41,7 +41,6 @@
     self.searchController.delegate = self;
     self.searchController.searchBar.delegate = self;
     self.searchController.searchResultsUpdater = self;
-    self.searchController.searchResultsController.
     
     // Keeps searchbar on screen but not the behavior I want
     self.searchController.hidesNavigationBarDuringPresentation = NO;

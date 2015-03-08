@@ -11,5 +11,6 @@
 @interface ScheduleViewController : UITableViewController
 
 @property (nonatomic, strong) NSString *fn;
+@property (nonatomic, strong) NSDate *date;
 
 @end
