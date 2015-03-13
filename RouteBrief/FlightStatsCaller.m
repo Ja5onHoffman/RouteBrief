@@ -83,8 +83,13 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy/MM/dd"];
     NSString *dateString = [NSString stringWithFormat:@"dep/%@", [dateFormatter stringFromDate:date]];
-
-    NSString *url = [NSString stringWithFormat:@"%@/%@/%@/%@", FlightStatsBaseURL, @"flightstatus/rest/v2/json/flight/status", number, dateString];
+    
+    NSCharacterSet *letterCharacterSet = [NSCharacterSet letterCharacterSet];
+    NSString *flightNum = [number stringByTrimmingCharactersInSet:letterCharacterSet];
+    NSString *airlineCode = [number stringByReplacingOccurrencesOfString:flightNum withString:@""];
+    
+    NSString *url = [NSString stringWithFormat:@"%@/%@/%@/%@/%@", FlightStatsBaseURL, @"flightstatus/rest/v2/json/flight/status", airlineCode, flightNum, dateString];
+    NSLog(@"%@", url);
     
     [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         completionHandler(responseObject);
