@@ -44,10 +44,6 @@
     [super viewDidLoad];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 #pragma mark - Table view data source
 
@@ -66,7 +62,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"nearbyAirport" forIndexPath:indexPath];
     
-    cell.textLabel.text = self.airports[indexPath.row];
+    UILabel *titleLabel = (UILabel *)[cell viewWithTag:100];
+    UILabel *distanceLabel = (UILabel *)[cell viewWithTag:101];
+    titleLabel.text = self.airports[indexPath.row][0];
+    distanceLabel.text = self.airports[indexPath.row][1];
     cell.backgroundView = [[CustomCellBackground alloc] init];
     cell.selectedBackgroundView = [[CustomCellBackground alloc] init];
     
@@ -79,7 +78,6 @@
     return title;
 }
 
-// Used name of setter method and caused infinite loop
 - (void)closestAirports:(NSNotification *)note
 {
     if (self.closestAirportsCalled == NO) {
@@ -88,17 +86,20 @@
         self.fullResp = [[NSArray alloc] init];
         
         [self.fsc retrieveAirportsNearLon:self.lon andLat:self.lat completionHandler:^(NSDictionary *resp) {
-            
             self.fullResp = resp[@"airports"];
-            
             for (NSDictionary *dict in [resp objectForKey:@"airports"]) {
+                double lat = [dict[@"latitude"] doubleValue];
+                double lon = [dict[@"longitude"] doubleValue];
+                CLLocation *loc = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+                CLLocation *userLoc = [[CLLocation alloc] initWithLatitude:self.lat longitude:self.lon];
+                CLLocationDistance dist = [userLoc distanceFromLocation:loc];
+                NSString *miles = [[NSString stringWithFormat:@"%.1f", (dist * 0.00062137)] stringByAppendingString:@" miles"];
                 if (dict[@"icao"]) {
-                    [self.airports addObject:dict[@"icao"]];
+                   [self.airports addObject:[NSArray arrayWithObjects:dict[@"icao"], miles, nil]];
                 } else {
-                    [self.airports addObject:dict[@"fs"]];
+                    [self.airports addObject:[NSArray arrayWithObjects:dict[@"fs"], miles, nil]];
                 }
             }
-            
             self.spinner.hidden = YES;
             [self.tableView reloadData];
         }];
@@ -120,7 +121,6 @@
     
     cwc.currentAirport = self.airports[indexPath.row];
     NSString *url = [self.fullResp[indexPath.row] objectForKey:@"weatherUrl"];
-    
     [self.fsc GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         dispatch_async(dispatch_get_main_queue(), ^{

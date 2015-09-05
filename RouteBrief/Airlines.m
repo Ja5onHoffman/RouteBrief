@@ -7,7 +7,6 @@
 
 #import "Airlines.h"
 
-
 NSString *const kAirlinesICAO = @"ICAO";
 NSString *const kAirlinesActive = @"Active";
 NSString *const kAirlinesAirlineID = @"Airline ID";

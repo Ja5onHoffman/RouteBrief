@@ -65,7 +65,6 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     NSLog(@"url %@", url);
     
     [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        
         NSSortDescriptor *sortByName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
         NSArray *sortDescriptors = [NSArray arrayWithObject:sortByName];
         airlines = [responseObject[@"airlines"] sortedArrayUsingDescriptors:sortDescriptors];
@@ -93,6 +92,7 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     
     [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         completionHandler(responseObject);
+        
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"There was an error");
     }];
@@ -119,13 +119,23 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     NSString *url = [NSString stringWithFormat:@"%@/%@/%f/%f/%@", FlightStatsBaseURL, @"airports/rest/v1/json/withinRadius", lon, lat, @"15"];
     
     [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-
         completionHandler(responseObject);
-        
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
         NSLog(@"There was an error");
     }];
+}
+
+- (BOOL)checkWx:(NSDictionary*)airport {
+    NSString *airportWx = airport[@"weatherUrl"];
+    NSLog(@"%@", airportWx);
+    __block BOOL hasWx = nil;
+    [self GET:airportWx parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        hasWx = true;
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        hasWx = false;
+    }];
+    
+    return hasWx;
 }
 
 @end

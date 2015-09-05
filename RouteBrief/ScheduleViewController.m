@@ -11,6 +11,7 @@
 #import "FlightStatsCaller.h"
 #import "WeatherViewController.h"
 #import "CustomCellBackground.h"
+#import "ScheduleResultsCell.h"
 #import "CustomHeader.h"
 #import "HudView.h"
 
@@ -22,6 +23,7 @@
 @property (nonatomic, weak) NSString *destination;
 @property (nonatomic, strong) FlightStatsCaller *fsc;
 @property (nonatomic, strong) NSDateFormatter *formatter;
+@property (nonatomic, strong) NSDictionary *responseObject;
 
 @end
 
@@ -52,28 +54,16 @@
     self.navigationController.navigationBar.backgroundColor = navColor;
     
     self.fsc.delegate = self;
+    [self.tableView registerClass:[ScheduleResultsCell class] forCellReuseIdentifier:@"ScheduleMatch"];
     
-    /*
-    void (^compHandler)(NSDictionary *, NSError *) = ^(NSDictionary *results, NSError *error) {
-        if (error) {
-            NSLog(@"There was an error");
-        } else {
-            self.scheduledFlights = [results objectForKey:@"flights"];
-            _flightDataReceived = YES;
-           // NSLog(@"_scheduledFlights: %@", _scheduledFlights);
-            NSLog(@"Saved");
-            
-            hudView.hidden = YES;
-            self.view.userInteractionEnabled = YES;
-        }
-        
-        [self.tableView reloadData];
-    }; */
-    
-    // Need datePicker
     if (_flightDataReceived == NO) {
         [self.fsc retrieveFlightsForFlightNumber:self.fn onDate:self.date completionHandler:^(NSDictionary *resp) {
-            NSLog(@"%@", resp);
+            
+            self.responseObject = resp[@"appendix"];
+            hudView.hidden = YES;
+            self.view.userInteractionEnabled = YES;
+            
+            [self.tableView reloadData];
     }];
         
     }
@@ -89,17 +79,22 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     // Return the number of rows in the section.
-    return [self.scheduledFlights count];
+    //return [self.scheduledFlights count];
+    
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"cfraip");
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ScheduleMatch" forIndexPath:indexPath];
+    ScheduleResultsCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ScheduleMatch" forIndexPath:indexPath];
+    NSLog(@"respobject %@", self.responseObject[@"flightStatuses"][0][@"departureAirportFsCode"]);
+    
     cell.backgroundView = [[CustomCellBackground alloc] init];
     cell.selectedBackgroundView = [[CustomCellBackground alloc] init];
     
-    id flightTime = self.scheduledFlights[indexPath.row][@"filed_time"];
+    id flightTime = self.responseObject[@"flightStatuses"][@"departureDate"][@"dateLocal"];
     NSTimeInterval time = [flightTime intValue];
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
     // NSDate *now = [[NSDate alloc] init];
@@ -107,14 +102,13 @@
     [_formatter setDateStyle:NSDateFormatterLongStyle];
     [_formatter setTimeStyle:NSDateFormatterShortStyle];
     
-    // Log date and route of each flight
-    // Need to filter out flights occurring in the past
-    _origin = self.scheduledFlights[indexPath.row][@"origin"];
-    _destination = self.scheduledFlights[indexPath.row][@"destination"];
+    NSLog(@"departure airport %@", [NSString stringWithFormat:@"%@", self.responseObject[@"flightStatuses"][@"departureAirportFsCode"]]);
     
-    cell.detailTextLabel.text = [_formatter stringFromDate:date];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ to %@", _origin, _destination];
     
+    cell.originLabel.text = self.responseObject[@"flightStatuses"][@"departureAirportFsCode"];
+    cell.destinationLabel.text = self.responseObject[@"flightStatuses"][@"arrivalAirportFsCode"];
+        
+    cell.flightNumber.text = self.fn;
 
     return cell;
 }
@@ -129,7 +123,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSString *title = @"Scheduled Flights";
+    NSString *title = @"Flight Info";
     
     return title;
 }
