@@ -11,10 +11,10 @@
 #import "FlightStatsCaller.h"
 #import "WeatherViewController.h"
 #import "CustomCellBackground.h"
-#import "ScheduleResultsCell.h"
 #import "CustomHeader.h"
 #import "HudView.h"
 
+static NSString *CellIdentifier = @"ScheduleMatch";
 
 @interface ScheduleViewController () <FlightStatsCallerDelegate>
 
@@ -23,7 +23,7 @@
 @property (nonatomic, weak) NSString *destination;
 @property (nonatomic, strong) FlightStatsCaller *fsc;
 @property (nonatomic, strong) NSDateFormatter *formatter;
-@property (nonatomic, strong) NSDictionary *responseObject;
+@property (nonatomic, strong) NSArray *responseObject;
 
 @end
 
@@ -32,19 +32,11 @@
     __block BOOL _flightDataReceived;
 }
 
-/*
- *  TODO: Implement NSDateFormatter to format date in schedule view
- *      - make reuseable -- static object in own method
- *
- */
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"ScheduleViewController viewDidLoad");
-    
     self.fsc = [[FlightStatsCaller alloc] init];
-    _formatter = [[NSDateFormatter alloc] init];
+    self.formatter = [[NSDateFormatter alloc] init];
     
     HudView *hudView = [HudView hudInView:self.navigationController.view animated:YES];
     
@@ -54,61 +46,47 @@
     self.navigationController.navigationBar.backgroundColor = navColor;
     
     self.fsc.delegate = self;
-    [self.tableView registerClass:[ScheduleResultsCell class] forCellReuseIdentifier:@"ScheduleMatch"];
-    
     if (_flightDataReceived == NO) {
         [self.fsc retrieveFlightsForFlightNumber:self.fn onDate:self.date completionHandler:^(NSDictionary *resp) {
-            
-            self.responseObject = resp[@"appendix"];
+            self.responseObject = resp[@"scheduledFlights"];
             hudView.hidden = YES;
             self.view.userInteractionEnabled = YES;
-            
             [self.tableView reloadData];
     }];
         
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 #pragma mark - Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    // Return the number of rows in the section.
-    //return [self.scheduledFlights count];
-    
-    return 1;
+    return [self.responseObject count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"cfraip");
-    
-    ScheduleResultsCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ScheduleMatch" forIndexPath:indexPath];
-    NSLog(@"respobject %@", self.responseObject[@"flightStatuses"][0][@"departureAirportFsCode"]);
-    
+{    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     cell.backgroundView = [[CustomCellBackground alloc] init];
     cell.selectedBackgroundView = [[CustomCellBackground alloc] init];
     
-    id flightTime = self.responseObject[@"flightStatuses"][@"departureDate"][@"dateLocal"];
-    NSTimeInterval time = [flightTime intValue];
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
-    // NSDate *now = [[NSDate alloc] init];
+    [self.formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.sss'"];
+    NSDate *rsTimeDate = [self.formatter dateFromString:[self.responseObject[indexPath.row] objectForKey:@"departureTime"]];
+    NSDateFormatter *visibleDateFormatter = [[NSDateFormatter alloc] init];
+    [visibleDateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [visibleDateFormatter setTimeStyle:NSDateFormatterShortStyle];
     
-    [_formatter setDateStyle:NSDateFormatterLongStyle];
-    [_formatter setTimeStyle:NSDateFormatterShortStyle];
+    NSString *visDate = [visibleDateFormatter stringFromDate:rsTimeDate];
     
-    NSLog(@"departure airport %@", [NSString stringWithFormat:@"%@", self.responseObject[@"flightStatuses"][@"departureAirportFsCode"]]);
+    UILabel *originLabel = (UILabel *)[cell viewWithTag:200];
+    UILabel *destinationLabel = (UILabel *)[cell viewWithTag:201];
+    UILabel *flightNumber = (UILabel *)[cell viewWithTag:202];
+    UILabel *date = (UILabel *)[cell viewWithTag:203];
     
-    
-    cell.originLabel.text = self.responseObject[@"flightStatuses"][@"departureAirportFsCode"];
-    cell.destinationLabel.text = self.responseObject[@"flightStatuses"][@"arrivalAirportFsCode"];
-        
-    cell.flightNumber.text = self.fn;
+    [originLabel setText:self.responseObject[indexPath.row][@"departureAirportFsCode"]];
+    [destinationLabel setText:self.responseObject[indexPath.row][@"arrivalAirportFsCode"]];
+    [flightNumber setText:[self.fn uppercaseString]];
+    [date setText:visDate];
 
     return cell;
 }
@@ -146,8 +124,7 @@
     wvc.destination = self.scheduledFlights[indexPath.row][@"destination"];
 }
 
-- (IBAction)refresh:(id)sender
-{
+- (IBAction)refresh:(id)sender {
     void (^compHandler)(NSDictionary *, NSError *) = ^(NSDictionary *results, NSError *error) {
         if (error) {
             NSLog(@"There was an error");
@@ -161,7 +138,6 @@
         });
     };
 
-    //[self.fsc getFlightsForFN:self.fn
 }
 
 @end

@@ -25,6 +25,14 @@
 
 @implementation ChooseAirlineViewController
 
+/****************************************************
+ 
+- This shouldn't always have to  reload the data.
+ 
+- Currently case sensitive
+ 
+*****************************************************/
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -34,7 +42,6 @@
     FlightStatsCaller *fsc = [FlightStatsCaller sharedFlightStatsCaller];
     [fsc getActiveAirlinesWithCompHandler:^(NSArray *ar) {
         self.airlines = ar;
-        
         [self.tableView reloadData];
     }];
 

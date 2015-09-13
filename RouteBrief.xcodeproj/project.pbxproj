@@ -15,7 +15,6 @@
 		31433F141A5EE5E700E3420B /* CustomHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 31433F131A5EE5E700E3420B /* CustomHeader.m */; };
 		314E894D19F5961A00C2D7B5 /* WeatherDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 314E894C19F5961A00C2D7B5 /* WeatherDetailViewController.m */; };
 		315279161A2A02B300CA78C9 /* ChooseAirlineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 315279151A2A02B300CA78C9 /* ChooseAirlineViewController.m */; };
-		31558C951AB3215300CA182A /* ScheduleResultsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 31558C941AB3215300CA182A /* ScheduleResultsCell.m */; };
 		3165AEA51A02E76D005C4AD8 /* NearestAirportsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3165AEA41A02E76D005C4AD8 /* NearestAirportsViewController.m */; };
 		31A7081219E9743A004BEDAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A7081119E9743A004BEDAF /* main.m */; };
 		31A7081519E9743B004BEDAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A7081419E9743B004BEDAF /* AppDelegate.m */; };
@@ -59,8 +58,6 @@
 		314E894C19F5961A00C2D7B5 /* WeatherDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherDetailViewController.m; sourceTree = "<group>"; };
 		315279141A2A02B300CA78C9 /* ChooseAirlineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseAirlineViewController.h; sourceTree = "<group>"; };
 		315279151A2A02B300CA78C9 /* ChooseAirlineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseAirlineViewController.m; sourceTree = "<group>"; };
-		31558C931AB3215300CA182A /* ScheduleResultsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleResultsCell.h; sourceTree = "<group>"; };
-		31558C941AB3215300CA182A /* ScheduleResultsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleResultsCell.m; sourceTree = "<group>"; };
 		3165AEA31A02E76D005C4AD8 /* NearestAirportsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NearestAirportsViewController.h; sourceTree = "<group>"; };
 		3165AEA41A02E76D005C4AD8 /* NearestAirportsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NearestAirportsViewController.m; sourceTree = "<group>"; };
 		31A7080C19E9743A004BEDAF /* RouteBrief.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RouteBrief.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,8 +169,6 @@
 				31A7083619E97670004BEDAF /* FlightNumberViewController.m */,
 				31A7084119EA09EC004BEDAF /* ScheduleViewController.h */,
 				31A7084219EA09ED004BEDAF /* ScheduleViewController.m */,
-				31558C931AB3215300CA182A /* ScheduleResultsCell.h */,
-				31558C941AB3215300CA182A /* ScheduleResultsCell.m */,
 				3165AEA31A02E76D005C4AD8 /* NearestAirportsViewController.h */,
 				3165AEA41A02E76D005C4AD8 /* NearestAirportsViewController.m */,
 				31ABA73619F70A600089AAA1 /* CurrentWxViewController.h */,
@@ -423,7 +418,6 @@
 				31ABA73819F70A600089AAA1 /* CurrentWxViewController.m in Sources */,
 				31A7083D19E98836004BEDAF /* WeatherViewController.m in Sources */,
 				3107767E1A312E00009D6173 /* Airlines.m in Sources */,
-				31558C951AB3215300CA182A /* ScheduleResultsCell.m in Sources */,
 				31A7083A19E981BD004BEDAF /* FlightAwareCaller.m in Sources */,
 				3165AEA51A02E76D005C4AD8 /* NearestAirportsViewController.m in Sources */,
 				315279161A2A02B300CA78C9 /* ChooseAirlineViewController.m in Sources */,

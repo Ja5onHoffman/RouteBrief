@@ -109,7 +109,6 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"scheduledFlights"]) {
-                
         ScheduleViewController *svc = segue.destinationViewController;
         svc.fn = self.fnLabel.text;
         svc.date = self.date;

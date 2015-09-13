@@ -59,8 +59,8 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
 
 - (void)getActiveAirlinesWithCompHandler:(void (^)(NSArray *ar))completionHandler
 {
+    NSLog(@"getactiveairlines");
     __block NSArray *airlines = [[NSArray alloc] init];
-    
     NSString *url = [NSString stringWithFormat:@"%@/%@/%@", FlightStatsBaseURL, @"airlines/rest/v1/json", @"active"];
     NSLog(@"url %@", url);
     
@@ -68,7 +68,6 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
         NSSortDescriptor *sortByName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
         NSArray *sortDescriptors = [NSArray arrayWithObject:sortByName];
         airlines = [responseObject[@"airlines"] sortedArrayUsingDescriptors:sortDescriptors];
-
         completionHandler(airlines);
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -79,20 +78,18 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
 
 - (void)retrieveFlightsForFlightNumber:(NSString *)number onDate:(NSDate *)date completionHandler:(void (^)(NSDictionary *))completionHandler
 {
+    NSLog(@"retrieveflightsforfn");
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy/MM/dd"];
-    NSString *dateString = [NSString stringWithFormat:@"dep/%@", [dateFormatter stringFromDate:date]];
+    NSString *dateString = [NSString stringWithFormat:@"departing/%@", [dateFormatter stringFromDate:date]];
     
     NSCharacterSet *letterCharacterSet = [NSCharacterSet letterCharacterSet];
     NSString *flightNum = [number stringByTrimmingCharactersInSet:letterCharacterSet];
     NSString *airlineCode = [number stringByReplacingOccurrencesOfString:flightNum withString:@""];
     
-    NSString *url = [NSString stringWithFormat:@"%@/%@/%@/%@/%@", FlightStatsBaseURL, @"flightstatus/rest/v2/json/flight/status", airlineCode, flightNum, dateString];
-    NSLog(@"%@", url);
-    
+    NSString *url = [NSString stringWithFormat:@"%@/%@/%@/%@/%@", FlightStatsBaseURL, @"schedules/rest/v1/json/flight", airlineCode, flightNum, dateString];
     [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         completionHandler(responseObject);
-        
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"There was an error");
     }];
