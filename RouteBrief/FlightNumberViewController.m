@@ -105,7 +105,6 @@
     return YES;
 }
 
-// Add segue instead of button press? YES
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"scheduledFlights"]) {
@@ -125,7 +124,6 @@
 - (IBAction)unwindToFlightNumberViewController:(UIStoryboardSegue *)segue
 {
     if ([segue.identifier isEqualToString:@"ChooseAirlineCode"]) {
-        
         ChooseAirlineViewController *cvc = segue.sourceViewController;
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -136,7 +134,6 @@
         });
         
     } else if ([segue.identifier isEqualToString:@"SearchAirlineCode"]) {
-        
         SearchResultsController *src = segue.sourceViewController;
         dispatch_async(dispatch_get_main_queue(), ^{
             self.fnLabel.text = @"";
@@ -149,26 +146,19 @@
 
 #pragma mark - Keyboard/Text Field Handling
 
-- (void)registerForKeyboardNotifications
-{
+- (void)registerForKeyboardNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardDidShowNotification object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
+- (void)keyboardWasShown:(NSNotification*)aNotification {
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
     self.scrollView.contentInset = contentInsets;
     self.scrollView.scrollIndicatorInsets = contentInsets;
-    
-    // If active text field is hidden by keyboard, scroll it so it's visible
-    // Your app might not need or want this behavior.
     CGRect aRect = self.view.frame;
     aRect.size.height -= kbSize.height;
     if (!CGRectContainsPoint(aRect, _activeField.frame.origin) ) {
@@ -176,9 +166,7 @@
     }
 }
 
-// Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     self.scrollView.contentInset = contentInsets;
     self.scrollView.scrollIndicatorInsets = contentInsets;

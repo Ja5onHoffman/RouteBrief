@@ -13,13 +13,15 @@
 
 @interface WeatherViewController () <FlightAwareCallerDelegate>
 
-
-@property (weak, nonatomic) __block IBOutlet UITableViewCell *originCell;
-@property (weak, nonatomic) __block IBOutlet UITableViewCell *destinationCell;
-
+@property (weak, nonatomic) IBOutlet UILabel *originCode;
+@property (weak, nonatomic) IBOutlet UILabel *originName;
+@property (weak, nonatomic) IBOutlet UILabel *originCondition;
+@property (weak, nonatomic) IBOutlet UILabel *destinationCode;
+@property (weak, nonatomic) IBOutlet UILabel *destinationName;
+@property (weak, nonatomic) IBOutlet UILabel *destinationCondition;
+@property (weak, nonatomic) IBOutlet UITextField *alternateField;
 @property (nonatomic, strong) FlightAwareCaller *fac;
 @property (nonatomic, strong) FlightStatsCaller *fsc;
-@property (weak, nonatomic) IBOutlet UITextField *alternateTextField;
 
 @end
 
@@ -28,58 +30,51 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.fsc = [[FlightStatsCaller alloc] init];
-    self.originCell.textLabel.text = self.origin;
-    self.destinationCell.textLabel.text = self.destination;
     
-    /*
-    [self.fsc getWeatherForAirport:self.origin completionHandler:^(NSString *results, NSError *error){
-       dispatch_async(dispatch_get_main_queue(), ^(void){
-         
-       });
-    }];
-
-    [self.fsc getWeatherForAirport:self.destination completionHandler:^(NSString *results, NSError *error){
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-       //self.destinationCell.detailTextLabel.text = results;
-        });
-    }]; */
-    
-    
+    [self setUpLabels];
     self.navigationController.navigationBarHidden = NO;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)setUpLabels {
+    [self.originCode setText:self.origin];
+    [self.destinationCode setText:self.destination];
+    NSPredicate *originPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"fs", self.origin];
+    NSPredicate *destinationPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"fs", self.destination];
+    NSArray *oArray = [self.airportsInfo filteredArrayUsingPredicate:originPredicate];
+    NSArray *dArray = [self.airportsInfo filteredArrayUsingPredicate:destinationPredicate];
+    [self.originName setText:oArray[0][@"name"]];
+    [self.destinationName setText:dArray[0][@"name"]];
 }
-
 
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     WeatherDetailViewController *wdc = segue.destinationViewController;
     wdc.results = NO;
-    
-    if ([segue.identifier isEqualToString:@"originSegue"] || [segue.identifier  isEqualToString:@"destinationSegue"]) {
+    if ([segue.identifier isEqualToString:@"originSegue"] || [segue.identifier isEqualToString:@"destinationSegue"]) {
         UITableViewCell *cell = sender;
+        NSString *airport = @"";
+        if (cell.tag == 98) {
+            airport = self.origin;
+        } else if (cell.tag == 99) {
+            airport = self.destination;
+        }
         dispatch_async(dispatch_get_main_queue(), ^(void){
-            wdc.codeMetar.text = [NSString stringWithFormat:@"%@ METAR", cell.textLabel.text];
-            wdc.codeTaf.text = [NSString stringWithFormat:@"%@ TAF", cell.textLabel.text];
-            
-            wdc.metarText = cell.detailTextLabel.text;
-            
-            [_fac getTafForAirport:cell.textLabel.text
-                 completionHandler:^(NSString *results, NSError *error) {
-                     dispatch_async(dispatch_get_main_queue(), ^(void){
-                         wdc.tafText = results;
-                         [[NSNotificationCenter defaultCenter] postNotificationName:@"labelsUpdated" object:nil];
-                     });
-                 }];
+            wdc.codeMetar.text = [NSString stringWithFormat:@"%@ METAR", airport];
+            wdc.codeTaf.text = [NSString stringWithFormat:@"%@ TAF", airport];
+            [self.fsc retrieveProduct:@"all" forAirport:airport completionHandler:^(NSDictionary *resp) {
+                NSString *metar = [resp[@"metar"] objectForKey:@"report"];
+                NSString *taf = [resp[@"metar"] objectForKey:@"report"];
+                NSString *fTaf = [taf stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                NSArray *components = [fTaf componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                components = [components filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self <> ''"]];
+                fTaf= [components componentsJoinedByString:@" "];
+                [wdc.metarLabel setText:metar];
+                [wdc.tafLabel setText:fTaf];
+            }];
         });
     } else if ([segue.identifier isEqualToString:@"alternateSegue"]) {
-            
-            NSString *alternate = self.alternateTextField.text;
-        
+            NSString *alternate = self.alternateField.text;
             dispatch_async(dispatch_get_main_queue(), ^(void){
                 wdc.codeMetar.text = [NSString stringWithFormat:@"%@ METAR", [alternate uppercaseString]];
                 wdc.codeTaf.text = [NSString stringWithFormat:@"%@ TAF", [alternate uppercaseString]];
@@ -117,13 +112,12 @@
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
     if ([identifier isEqualToString:@"alternateSegue"]) {
-        
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Missing Alternate" message:@"Please enter an alternate airport using the four letter format 'KDTW'" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {}];
         [alert addAction:alertAction];
 
         
-        if ([self.alternateTextField.text length] != 4) {
+        if ([self.alternateField.text length] != 4) {
             [self presentViewController:alert animated:YES completion:^{}];
             return NO;
         } else {

@@ -12,8 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *codeMetar;
 @property (weak, nonatomic) IBOutlet UILabel *codeTaf;
-@property (nonatomic, strong) NSString *metarText;
-@property (nonatomic, strong) NSString *tafText;
 @property (weak, nonatomic) IBOutlet UILabel *metarLabel;
 @property (weak, nonatomic) IBOutlet UILabel *tafLabel;
 @property (nonatomic) BOOL results;

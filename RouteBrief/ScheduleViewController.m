@@ -19,6 +19,7 @@ static NSString *CellIdentifier = @"ScheduleMatch";
 @interface ScheduleViewController () <FlightStatsCallerDelegate>
 
 @property (nonatomic, strong) __block NSArray *scheduledFlights;
+@property (nonatomic, strong) __block NSArray *airportsInfo;
 @property (nonatomic, weak) NSString *origin;
 @property (nonatomic, weak) NSString *destination;
 @property (nonatomic, strong) FlightStatsCaller *fsc;
@@ -49,6 +50,7 @@ static NSString *CellIdentifier = @"ScheduleMatch";
     if (_flightDataReceived == NO) {
         [self.fsc retrieveFlightsForFlightNumber:self.fn onDate:self.date completionHandler:^(NSDictionary *resp) {
             self.responseObject = resp[@"scheduledFlights"];
+            self.airportsInfo = resp[@"appendix"][@"airports"];
             hudView.hidden = YES;
             self.view.userInteractionEnabled = YES;
             [self.tableView reloadData];
@@ -120,8 +122,9 @@ static NSString *CellIdentifier = @"ScheduleMatch";
     // Get indexPath for selected cell so orig and dest will update when new cell is selected
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     
-    wvc.origin = self.scheduledFlights[indexPath.row][@"origin"];
-    wvc.destination = self.scheduledFlights[indexPath.row][@"destination"];
+    wvc.origin = self.responseObject[indexPath.row][@"departureAirportFsCode"];
+    wvc.destination = self.responseObject[indexPath.row][@"arrivalAirportFsCode"];
+    wvc.airportsInfo = self.airportsInfo;
 }
 
 - (IBAction)refresh:(id)sender {

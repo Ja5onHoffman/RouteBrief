@@ -95,24 +95,17 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     }];
 }
 
-// AFNetworking
-- (void)retrieveProduct:(NSString *)product forAirport:(NSString *)airport completionHandler:(void(^)(NSDictionary *resp))completionHandler
-{
-    
+// "metar", "taf" or "all"
+- (void)retrieveProduct:(NSString *)product forAirport:(NSString *)airport completionHandler:(void(^)(NSDictionary *resp))completionHandler {
     NSString *url = [NSString stringWithFormat:@"%@/%@/%@/%@", FlightStatsBaseURL, @"weather/rest/v1/json", product, airport];
-    
     [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        
         completionHandler(responseObject);
-        
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-
         NSLog(@"There was an error");
     }];
 }
 
-- (void)retrieveAirportsNearLon:(float)lon andLat:(float)lat completionHandler:(void(^)(NSDictionary *resp))completionHandler
-{
+- (void)retrieveAirportsNearLon:(float)lon andLat:(float)lat completionHandler:(void(^)(NSDictionary *resp))completionHandler {
     NSString *url = [NSString stringWithFormat:@"%@/%@/%f/%f/%@", FlightStatsBaseURL, @"airports/rest/v1/json/withinRadius", lon, lat, @"15"];
     
     [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {

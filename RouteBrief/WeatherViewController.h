@@ -10,8 +10,9 @@
 
 @interface WeatherViewController : UITableViewController
 
-@property (nonatomic, weak) NSString *origin;
-@property (nonatomic, weak) NSString *destination;
-@property (nonatomic, weak) NSString *alternate;
+@property (nonatomic, strong) NSString *origin;
+@property (nonatomic, strong) NSString *destination;
+@property (nonatomic, strong) NSString *alternate;
+@property (nonatomic, strong) NSArray *airportsInfo;
 
 @end
