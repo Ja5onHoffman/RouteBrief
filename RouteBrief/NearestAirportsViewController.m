@@ -9,6 +9,7 @@
 #import "NearestAirportsViewController.h"
 #import "CurrentWxViewController.h"
 #import "CustomCellBackground.h"
+#import "CustomUINavigationBar.h"
 #import "CustomHeader.h"
 
 @interface NearestAirportsViewController () <FlightStatsCallerDelegate>
@@ -39,9 +40,9 @@
     return self;
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+
 }
 
 
@@ -113,6 +114,9 @@
 
 #pragma mark - Navigation
 
+- (IBAction)doneButtonPressed:(UIBarButtonItem *)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 // Use weather URL returned from location call instead of calling again for weather
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

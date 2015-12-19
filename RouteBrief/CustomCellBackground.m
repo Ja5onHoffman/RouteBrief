@@ -17,8 +17,8 @@
     CGRect cellRect = self.bounds;
     
     UIColor * whiteColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
-    UIColor * lightGrayColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0];
-    UIColor * separatorColor = [UIColor colorWithRed:208.0/255.0 green:208.0/255.0 blue:208.0/255.0 alpha:1.0];
+    UIColor * lightGrayColor = [UIColor colorWithRed:239.0/255.0 green:100.0/255.0 blue:97.0/255.0 alpha:1.0];
+    UIColor * separatorColor = [UIColor colorWithRed:1.0/255.0 green:59.0/255.0 blue:94.0/255.0 alpha:1.0];
     
     CGContextSaveGState(context); {
     

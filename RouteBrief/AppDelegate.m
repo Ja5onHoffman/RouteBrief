@@ -22,8 +22,10 @@
     NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
     [NSURLCache setSharedURLCache:URLCache];
     
-    UIColor *navColor = [UIColor colorWithRed:52.0f/255.0f green:60.0f/255.0f blue:69.0f/255.0f alpha:1.0];
-    [[UINavigationBar appearance] setBackgroundColor:navColor];
+    UIColor *navBarColor = [UIColor colorWithRed:49.0f/255.0f green:54.0f/255.0f blue:56.0f/255.0f alpha:1.0];
+    UIColor *navTintColor = [UIColor colorWithRed:232.0f/255.0f green:233.0f/255.0f blue:235.0f/255.0f alpha:1.0];
+    [[UINavigationBar appearance] setBarTintColor:navBarColor];
+    [[UINavigationBar appearance] setTintColor:navTintColor];
     [[UINavigationBar appearance] setTranslucent:NO];
     
     return YES;

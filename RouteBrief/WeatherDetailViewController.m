@@ -17,7 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    NSLog(@"viewDidLoad");
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reload:) name:@"labelsUpdated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(noResults:) name:@"noResults" object:nil];
 }
@@ -26,11 +26,9 @@
 
 //heightforrowatindexpath
 
-- (void)reload:(NSNotification *)note
-{
+- (void)reload:(NSNotification *)note {
 
-    
-    NSDictionary *attributes = @{NSFontAttributeName : self.metarLabel.font};
+//    NSDictionary *attributes = @{NSFontAttributeName : self.metarLabel.font};
     
     /*CGSiz rect1 = [self.metarText boundingRectWithSize:CGSizeMake(self.metarLabel.frame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil]; */
     
@@ -46,8 +44,7 @@
     [self.tableView reloadData];
 }
 
-- (void)noResults:(NSNotification *)note
-{
+- (void)noResults:(NSNotification *)note {
     NSString *alertMessage = [NSString stringWithFormat:@"No results returned. Are you sure %@ is a valid airport?", [self.codeMetar.text substringToIndex:3]];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No results" message:alertMessage preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"Go Back" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {

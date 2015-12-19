@@ -27,8 +27,6 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-
-        
         _sharedFlightStatsCaller = [[self alloc] initWithBaseURL:[NSURL URLWithString:FlightStatsBaseURL]];
     });
     
@@ -107,7 +105,6 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
 
 - (void)retrieveAirportsNearLon:(float)lon andLat:(float)lat completionHandler:(void(^)(NSDictionary *resp))completionHandler {
     NSString *url = [NSString stringWithFormat:@"%@/%@/%f/%f/%@", FlightStatsBaseURL, @"airports/rest/v1/json/withinRadius", lon, lat, @"15"];
-    
     [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         completionHandler(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -126,6 +123,10 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     }];
     
     return hasWx;
+}
+
+- (NSDictionary *)parseTafFromResponse:(id)response {
+    
 }
 
 @end

@@ -22,6 +22,7 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) UITextField *activeField;
 @property (weak, nonatomic) IBOutlet UIButton *chooseAirlineButton;
+@property (weak, nonatomic) IBOutlet UIButton *routeButton;
 @property (weak, nonatomic) IBOutlet UITextField *dateField;
 @property (strong, nonatomic) UIDatePicker *datePicker;
 @property (nonatomic ,weak) NSDate *date;
@@ -30,17 +31,19 @@
 
 @implementation FlightNumberViewController
 
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    NSLog(@"FlightNumberViewController viewDidLoad");
-    // Do any additional setup after loading the view.
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyBoard:)];
     [self.view addGestureRecognizer:tapGesture];
     self.navigationController.navigationBarHidden = YES;
     self.fnLabel.delegate = self;
     self.dateField.delegate = self;
+    
+    self.routeButton.layer.cornerRadius = 5;
+    self.currentWxButton.layer.cornerRadius = 5;
     
     [self registerForKeyboardNotifications];
 }
@@ -67,12 +70,10 @@
         self.datePicker = [[UIDatePicker alloc] init];
         [self.datePicker setDatePickerMode:UIDatePickerModeDate];
 
-        [self.datePicker setDate:[NSDate date]];
         [self.datePicker setMinimumDate:[NSDate date]];
+        [self.datePicker setDate:[NSDate date]];
         textField.inputView = self.datePicker;
         textField.inputAccessoryView = doneBar;
-        
-        self.date = [self.datePicker date];
     }
 }
 
@@ -82,12 +83,13 @@
     if (textField == self.dateField || [self.dateField isFirstResponder]) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"MM/dd/yyyy"];
-
+        
+        self.date = [self.datePicker date];
         self.dateField.text = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.date]];
         [self.dateField endEditing:YES];
     }
     
-    _activeField = nil;
+    self.activeField = nil;
 }
 
 - (void)dismissKeyBoard:(UITapGestureRecognizer *)sender

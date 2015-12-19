@@ -16,7 +16,7 @@
 
 static NSString *CellIdentifier = @"ScheduleMatch";
 
-@interface ScheduleViewController () <FlightStatsCallerDelegate>
+@interface ScheduleViewController () <FlightStatsCallerDelegate, NSCoding>
 
 @property (nonatomic, strong) __block NSArray *scheduledFlights;
 @property (nonatomic, strong) __block NSArray *airportsInfo;
@@ -25,6 +25,7 @@ static NSString *CellIdentifier = @"ScheduleMatch";
 @property (nonatomic, strong) FlightStatsCaller *fsc;
 @property (nonatomic, strong) NSDateFormatter *formatter;
 @property (nonatomic, strong) NSArray *responseObject;
+@property (nonatomic, strong) NSMutableArray *airports;
 
 @end
 
@@ -38,9 +39,10 @@ static NSString *CellIdentifier = @"ScheduleMatch";
     [super viewDidLoad];
     self.fsc = [[FlightStatsCaller alloc] init];
     self.formatter = [[NSDateFormatter alloc] init];
-    
+    _flightDataReceived = NO;
     HudView *hudView = [HudView hudInView:self.navigationController.view animated:YES];
-    
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+//    [notificationCenter addObserver:self selector:@selector(updateWeather) name:@"updateWeather" object:nil];
     self.navigationController.navigationBarHidden = NO;
     
     UIColor *navColor = [UIColor colorWithRed:52.0f/255.0f green:60.0f/255.0f blue:69.0f/255.0f alpha:1.0];
@@ -54,10 +56,11 @@ static NSString *CellIdentifier = @"ScheduleMatch";
             hudView.hidden = YES;
             self.view.userInteractionEnabled = YES;
             [self.tableView reloadData];
-    }];
-        
+//            [notificationCenter postNotificationName:@"updateWeather" object:nil];
+        }];
     }
 }
+
 
 
 #pragma mark - Table view data source
@@ -69,9 +72,9 @@ static NSString *CellIdentifier = @"ScheduleMatch";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.backgroundView = [[CustomCellBackground alloc] init];
-    cell.selectedBackgroundView = [[CustomCellBackground alloc] init];
-    
+//    cell.backgroundView = [[CustomCellBackground alloc] init];
+//    cell.selectedBackgroundView = [[CustomCellBackground alloc] init];
+    cell.backgroundColor = [UIColor colorWithRed:224.0f/255.0 green:223.0f/255.0 blue:213.0f/255.0 alpha:1.0];
     [self.formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.sss'"];
     NSDate *rsTimeDate = [self.formatter dateFromString:[self.responseObject[indexPath.row] objectForKey:@"departureTime"]];
     NSDateFormatter *visibleDateFormatter = [[NSDateFormatter alloc] init];
@@ -113,15 +116,27 @@ static NSString *CellIdentifier = @"ScheduleMatch";
     return 50;
 }
 
+//- (void)updateWeather {
+//    NSArray *noDupes = [self.airportsInfo valueForKeyPath:@"@distinctUnionOfObjects.icao"];
+//    for (NSString *airport in noDupes) {
+//        [self.fsc retrieveProduct:@"all" forAirport:airport completionHandler:^(NSDictionary *resp) {
+//            self.metar = [resp[@"metar"] objectForKey:@"report"];
+//            NSString *taf = [resp[@"metar"] objectForKey:@"report"];
+//            NSString *fTaf = [taf stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+//            NSArray *components = [fTaf componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+//            components = [components filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self <> ''"]];
+//            self.taf = [components componentsJoinedByString:@" "];
+//        }];
+//    }
+//}
+
 
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     WeatherViewController *wvc = segue.destinationViewController;
-    
     // Get indexPath for selected cell so orig and dest will update when new cell is selected
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-    
     wvc.origin = self.responseObject[indexPath.row][@"departureAirportFsCode"];
     wvc.destination = self.responseObject[indexPath.row][@"arrivalAirportFsCode"];
     wvc.airportsInfo = self.airportsInfo;
@@ -144,3 +159,4 @@ static NSString *CellIdentifier = @"ScheduleMatch";
 }
 
 @end
+
