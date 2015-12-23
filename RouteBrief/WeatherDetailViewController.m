@@ -48,8 +48,6 @@
     NSString *alertMessage = [NSString stringWithFormat:@"No results returned. Are you sure %@ is a valid airport?", [self.codeMetar.text substringToIndex:3]];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No results" message:alertMessage preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"Go Back" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        NSLog(@"pressed");
-
         [self.navigationController popViewControllerAnimated:YES];
     }];
     

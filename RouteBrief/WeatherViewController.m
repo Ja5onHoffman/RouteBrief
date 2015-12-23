@@ -101,33 +101,16 @@
                 wdc.codeMetar.text = [NSString stringWithFormat:@"%@ METAR", [alternate uppercaseString]];
                 wdc.codeTaf.text = [NSString stringWithFormat:@"%@ TAF", [alternate uppercaseString]];
             });
-            
-            [self.fac getMetarForAirport:alternate completionHandler:^(NSString *results, NSError *error) {
-                if ([results length] != 0) {
-                    dispatch_async(dispatch_get_main_queue(), ^(void){
-                        wdc.metarLabel.text = results;
-                        wdc.results = YES;
-                        NSLog(@"wdc.results %d", wdc.results);
-                    });
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), ^(void){
-                        wdc.metarLabel.text = @"";
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"noResults" object:nil];
-                    });
-                }
-            }];
-            
-            [self.fac getTafForAirport:alternate completionHandler:^(NSString *results, NSError *error) {
-                if ([results length] != 0)  {
-                    dispatch_async(dispatch_get_main_queue(), ^(void){
-                        wdc.tafLabel.text = results;
-                    });
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), ^(void){
-                        wdc.tafLabel.text = @"";
-                    });
-                }
-            }];
+        
+        [self.fsc retrieveProduct:@"all" forAirport:self.alternateField.text completionHandler:^(NSDictionary *resp) {
+            wdc.metarLabel.text = [resp[@"metar"] objectForKey:@"report"];
+            NSString *taf = [resp[@"taf"] objectForKey:@"report"];
+            NSString *fTaf = [taf stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            NSArray *components = [fTaf componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            components = [components filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self <> ''"]];
+            wdc.tafLabel.text = [components componentsJoinedByString:@" "];
+        }];
+
     }
 }
 
@@ -153,7 +136,6 @@
 - (void)getWeather {
 //    NSArray *noDupes = [self.airportsInfo valueForKeyPath:@"@distinctUnionOfObjects.icao"];
     NSArray *airports = [NSArray arrayWithObjects:self.originCode.text, self.destinationCode.text, nil];
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         // Origin
         [self.fsc retrieveProduct:@"all" forAirport:airports[0] completionHandler:^(NSDictionary *resp) {
@@ -196,7 +178,7 @@
     UILabel *oLabel = [cell viewWithTag:102];
     if ([oLabel.text isEqualToString: @"VFR"]) {
         return vfr;
-    } else if ([oLabel.text isEqualToString:@"IFR"]) {
+    } else if ([oLabel.text isEqualToString:@"IFR"] || [oLabel.text isEqualToString:@"LIFR"]) {
         return ifr;
     } else if ([oLabel.text isEqualToString:@"MVFR"]) {
         return mvfr;
@@ -214,7 +196,7 @@
     UILabel *oLabel = [cell viewWithTag:102];
     if ([oLabel.text isEqualToString: @"VFR"]) {
         return vfr;
-    } else if ([oLabel.text isEqualToString:@"IFR"]) {
+    } else if ([oLabel.text isEqualToString:@"IFR"] || [oLabel.text isEqualToString:@"LIFR"]) {
         return ifr;
     } else if ([oLabel.text isEqualToString:@"MVFR"]) {
         return mvfr;

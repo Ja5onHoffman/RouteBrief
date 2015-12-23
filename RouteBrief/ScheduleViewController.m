@@ -56,7 +56,6 @@ static NSString *CellIdentifier = @"ScheduleMatch";
             hudView.hidden = YES;
             self.view.userInteractionEnabled = YES;
             [self.tableView reloadData];
-//            [notificationCenter postNotificationName:@"updateWeather" object:nil];
         }];
     }
 }
@@ -72,8 +71,6 @@ static NSString *CellIdentifier = @"ScheduleMatch";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-//    cell.backgroundView = [[CustomCellBackground alloc] init];
-//    cell.selectedBackgroundView = [[CustomCellBackground alloc] init];
     cell.backgroundColor = [UIColor colorWithRed:224.0f/255.0 green:223.0f/255.0 blue:213.0f/255.0 alpha:1.0];
     [self.formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.sss'"];
     NSDate *rsTimeDate = [self.formatter dateFromString:[self.responseObject[indexPath.row] objectForKey:@"departureTime"]];
@@ -82,7 +79,6 @@ static NSString *CellIdentifier = @"ScheduleMatch";
     [visibleDateFormatter setTimeStyle:NSDateFormatterShortStyle];
     
     NSString *visDate = [visibleDateFormatter stringFromDate:rsTimeDate];
-    
     UILabel *originLabel = (UILabel *)[cell viewWithTag:200];
     UILabel *destinationLabel = (UILabel *)[cell viewWithTag:201];
     UILabel *flightNumber = (UILabel *)[cell viewWithTag:202];
@@ -100,7 +96,6 @@ static NSString *CellIdentifier = @"ScheduleMatch";
 {
     CustomHeader *header = [[CustomHeader alloc] init];
     header.titleLabel.text = [self tableView:tableView titleForHeaderInSection:section];
-    
     return header;
 }
 

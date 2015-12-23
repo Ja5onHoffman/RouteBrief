@@ -110,6 +110,15 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"scheduledFlights"]) {
+        if (!self.date) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Date" message:@"Please enter a valid date." preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self.navigationController popViewControllerAnimated:YES];
+            }];
+            [alert addAction:action];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        
         ScheduleViewController *svc = segue.destinationViewController;
         svc.fn = self.fnLabel.text;
         svc.date = self.date;

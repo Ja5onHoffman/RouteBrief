@@ -125,8 +125,13 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     return hasWx;
 }
 
-- (NSDictionary *)parseTafFromResponse:(id)response {
-    
-}
+//- (NSDictionary *)parseDecodedTafFromResponse:(id)response {
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+//    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.sss'"];
+//    [timeFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.sss'"];
+//    
+//    NSString *taf = [response[@"taf"] objectForKey:@"forecasts"];
+//}
 
 @end
