@@ -68,8 +68,7 @@ static NSString *CellIdentifier = @"ScheduleMatch";
     return [self.responseObject count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     cell.backgroundColor = [UIColor colorWithRed:224.0f/255.0 green:223.0f/255.0 blue:213.0f/255.0 alpha:1.0];
     [self.formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.sss'"];
@@ -83,12 +82,22 @@ static NSString *CellIdentifier = @"ScheduleMatch";
     UILabel *destinationLabel = (UILabel *)[cell viewWithTag:201];
     UILabel *flightNumber = (UILabel *)[cell viewWithTag:202];
     UILabel *date = (UILabel *)[cell viewWithTag:203];
+    UILabel *city1 = (UILabel *)[cell viewWithTag:205];
+    UILabel *city2 = (UILabel *)[cell viewWithTag:206];
     
     [originLabel setText:self.responseObject[indexPath.row][@"departureAirportFsCode"]];
     [destinationLabel setText:self.responseObject[indexPath.row][@"arrivalAirportFsCode"]];
     [flightNumber setText:[self.fn uppercaseString]];
     [date setText:visDate];
 
+    NSPredicate *originPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"fs", originLabel.text];
+    NSPredicate *destinationPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"fs", destinationLabel.text];
+    NSArray *originInfo = [self.airportsInfo filteredArrayUsingPredicate:originPredicate];
+    NSArray *destinationInfo = [self.airportsInfo filteredArrayUsingPredicate:destinationPredicate];
+    
+    [city1 setText:originInfo[0][@"city"]];
+    [city2 setText:destinationInfo[0][@"city"]];
+    
     return cell;
 }
 

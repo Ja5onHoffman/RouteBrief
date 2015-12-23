@@ -55,9 +55,7 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     return self;
 }
 
-- (void)getActiveAirlinesWithCompHandler:(void (^)(NSArray *ar))completionHandler
-{
-    NSLog(@"getactiveairlines");
+- (void)getActiveAirlinesWithCompHandler:(void (^)(NSArray *ar))completionHandler {
     __block NSArray *airlines = [[NSArray alloc] init];
     NSString *url = [NSString stringWithFormat:@"%@/%@/%@", FlightStatsBaseURL, @"airlines/rest/v1/json", @"active"];
     NSLog(@"url %@", url);
@@ -76,7 +74,6 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
 
 - (void)retrieveFlightsForFlightNumber:(NSString *)number onDate:(NSDate *)date completionHandler:(void (^)(NSDictionary *))completionHandler
 {
-    NSLog(@"retrieveflightsforfn");
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy/MM/dd"];
     NSString *dateString = [NSString stringWithFormat:@"departing/%@", [dateFormatter stringFromDate:date]];
