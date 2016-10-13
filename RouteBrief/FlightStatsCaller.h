@@ -29,5 +29,6 @@
 - (BOOL)checkWx:(NSDictionary *)airport;
 
 @property (nonatomic, weak) id<FlightStatsCallerDelegate> delegate;
+@property (nonatomic, strong) NSDictionary *params;
 
 @end

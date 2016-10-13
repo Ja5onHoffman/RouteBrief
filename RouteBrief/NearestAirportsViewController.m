@@ -125,7 +125,7 @@
     
     cwc.currentAirport = self.airports[indexPath.row];
     NSString *url = [self.fullResp[indexPath.row] objectForKey:@"weatherUrl"];
-    [self.fsc GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self.fsc GET:url parameters:self.fsc.params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             cwc.metarCell.textLabel.text = [[responseObject objectForKey:@"metar"] objectForKey:@"report"];

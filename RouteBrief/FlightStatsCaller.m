@@ -44,23 +44,24 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
         
         self.appID = [keys objectForKey:@"appID"];
         self.appKey = [keys objectForKey:@"appKey"];
-        
-        self.responseSerializer = [AFJSONResponseSerializer serializer];
-        self.requestSerializer = [AFJSONRequestSerializer serializer];
-        
-        [self.requestSerializer setValue:self.appKey forHTTPHeaderField:@"appKey"];
-        [self.requestSerializer setValue:self.appID forHTTPHeaderField:@"appId"];
+        self.params = @{@"appId": self.appID, @"appKey": self.appKey};
+//        self.requestSerializer = [AFHTTPRequestSerializer serializer];
+//        self.responseSerializer = [AFJSONResponseSerializer serializer];
+//
+//        [self.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//        [self.requestSerializer setValue:self.appKey forHTTPHeaderField:@"appKey"];
+//        [self.requestSerializer setValue:self.appID forHTTPHeaderField:@"appId"];
     }
     
     return self;
 }
 
+// Not receiveing appId. Maybe go back to setting manually in URL
 - (void)getActiveAirlinesWithCompHandler:(void (^)(NSArray *ar))completionHandler {
     __block NSArray *airlines = [[NSArray alloc] init];
     NSString *url = [NSString stringWithFormat:@"%@/%@/%@", FlightStatsBaseURL, @"airlines/rest/v1/json", @"active"];
     NSLog(@"url %@", url);
-    
-    [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:url parameters:self.params success:^(NSURLSessionDataTask *task, id responseObject) {
         NSSortDescriptor *sortByName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
         NSArray *sortDescriptors = [NSArray arrayWithObject:sortByName];
         airlines = [responseObject[@"airlines"] sortedArrayUsingDescriptors:sortDescriptors];
@@ -83,7 +84,8 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     NSString *airlineCode = [number stringByReplacingOccurrencesOfString:flightNum withString:@""];
     
     NSString *url = [NSString stringWithFormat:@"%@/%@/%@/%@/%@", FlightStatsBaseURL, @"schedules/rest/v1/json/flight", airlineCode, flightNum, dateString];
-    [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    
+    [self GET:url parameters:self.params success:^(NSURLSessionDataTask *task, id responseObject) {
         completionHandler(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"There was an error");
@@ -93,7 +95,7 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
 // "metar", "taf" or "all"
 - (void)retrieveProduct:(NSString *)product forAirport:(NSString *)airport completionHandler:(void(^)(NSDictionary *resp))completionHandler {
     NSString *url = [NSString stringWithFormat:@"%@/%@/%@/%@", FlightStatsBaseURL, @"weather/rest/v1/json", product, airport];
-    [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:url parameters:self.params success:^(NSURLSessionDataTask *task, id responseObject) {
         completionHandler(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"There was an error");
@@ -102,7 +104,7 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
 
 - (void)retrieveAirportsNearLon:(float)lon andLat:(float)lat completionHandler:(void(^)(NSDictionary *resp))completionHandler {
     NSString *url = [NSString stringWithFormat:@"%@/%@/%f/%f/%@", FlightStatsBaseURL, @"airports/rest/v1/json/withinRadius", lon, lat, @"15"];
-    [self GET:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:url parameters:self.params success:^(NSURLSessionDataTask *task, id responseObject) {
         completionHandler(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"There was an error");
@@ -113,7 +115,7 @@ static NSString * const FlightStatsBaseURL = @"https://api.flightstats.com/flex"
     NSString *airportWx = airport[@"weatherUrl"];
     NSLog(@"%@", airportWx);
     __block BOOL hasWx = nil;
-    [self GET:airportWx parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:airportWx parameters:self.params success:^(NSURLSessionDataTask *task, id responseObject) {
         hasWx = true;
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         hasWx = false;

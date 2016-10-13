@@ -17,6 +17,7 @@
 		314E894D19F5961A00C2D7B5 /* WeatherDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 314E894C19F5961A00C2D7B5 /* WeatherDetailViewController.m */; };
 		315279161A2A02B300CA78C9 /* ChooseAirlineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 315279151A2A02B300CA78C9 /* ChooseAirlineViewController.m */; };
 		3165AEA51A02E76D005C4AD8 /* NearestAirportsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3165AEA41A02E76D005C4AD8 /* NearestAirportsViewController.m */; };
+		31760F871D1CD93400066025 /* TODO.m in Sources */ = {isa = PBXBuildFile; fileRef = 31760F861D1CD93400066025 /* TODO.m */; };
 		31A7081219E9743A004BEDAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A7081119E9743A004BEDAF /* main.m */; };
 		31A7081519E9743B004BEDAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A7081419E9743B004BEDAF /* AppDelegate.m */; };
 		31A7081B19E9743B004BEDAF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31A7081919E9743B004BEDAF /* Main.storyboard */; };
@@ -63,6 +64,7 @@
 		315279151A2A02B300CA78C9 /* ChooseAirlineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseAirlineViewController.m; sourceTree = "<group>"; };
 		3165AEA31A02E76D005C4AD8 /* NearestAirportsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NearestAirportsViewController.h; sourceTree = "<group>"; };
 		3165AEA41A02E76D005C4AD8 /* NearestAirportsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NearestAirportsViewController.m; sourceTree = "<group>"; };
+		31760F861D1CD93400066025 /* TODO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TODO.m; sourceTree = "<group>"; };
 		31A7080C19E9743A004BEDAF /* RouteBrief.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RouteBrief.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31A7081019E9743A004BEDAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		31A7081119E9743A004BEDAF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				314E894C19F5961A00C2D7B5 /* WeatherDetailViewController.m */,
 				314116BE1A0D3E5A001F6E4B /* HudView.h */,
 				314116BF1A0D3E5A001F6E4B /* HudView.m */,
+				31760F861D1CD93400066025 /* TODO.m */,
 				31A7081919E9743B004BEDAF /* Main.storyboard */,
 				31A7081C19E9743B004BEDAF /* Images.xcassets */,
 				31A7081E19E9743B004BEDAF /* LaunchScreen.xib */,
@@ -287,7 +290,7 @@
 		31A7080419E9743A004BEDAF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = No5age;
 				TargetAttributes = {
 					31A7080B19E9743A004BEDAF = {
@@ -424,6 +427,7 @@
 				314E894D19F5961A00C2D7B5 /* WeatherDetailViewController.m in Sources */,
 				31ABA73819F70A600089AAA1 /* CurrentWxViewController.m in Sources */,
 				31A7083D19E98836004BEDAF /* WeatherViewController.m in Sources */,
+				31760F871D1CD93400066025 /* TODO.m in Sources */,
 				3107767E1A312E00009D6173 /* Airlines.m in Sources */,
 				31A7083A19E981BD004BEDAF /* FlightAwareCaller.m in Sources */,
 				3165AEA51A02E76D005C4AD8 /* NearestAirportsViewController.m in Sources */,
@@ -482,8 +486,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -492,6 +498,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -524,8 +531,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -533,6 +542,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

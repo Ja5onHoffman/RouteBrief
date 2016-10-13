@@ -39,6 +39,7 @@
     UINavigationController *searchResultsController = [[self storyboard] instantiateViewControllerWithIdentifier:@"TableSearchResultsNavigationController"];
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:searchResultsController];
     
+    // Getting airline data instead of using airlineData.json
     FlightStatsCaller *fsc = [FlightStatsCaller sharedFlightStatsCaller];
     [fsc getActiveAirlinesWithCompHandler:^(NSArray *ar) {
         self.airlines = ar;
@@ -61,11 +62,6 @@
      *
     NSArray *scopeButtonTitles = @[@"US Airlines", @"All Airlines"];
     self.searchController.searchBar.scopeButtonTitles = scopeButtonTitles; */
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (IBAction)cancelButtonClicked:(id)sender {
@@ -93,7 +89,7 @@
 {
     NSLog(@"selected");
         
-    self.selectedAirline = [NSString stringWithFormat:@"%@ - %@", [self.airlines[indexPath.row] objectForKey:@"name"], [self.airlines[indexPath.row] objectForKey:@"icao"]];
+    self.selectedAirline = [NSString stringWithFormat:@"%@", [self.airlines[indexPath.row] objectForKey:@"name"]];
     self.icao = [self.airlines[indexPath.row] objectForKey:@"icao"];
     
     [self performSegueWithIdentifier:@"ChooseAirlineCode" sender:self];

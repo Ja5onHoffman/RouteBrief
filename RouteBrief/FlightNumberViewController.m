@@ -26,6 +26,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *dateField;
 @property (strong, nonatomic) UIDatePicker *datePicker;
 @property (nonatomic ,weak) NSDate *date;
+@property (nonatomic) CGPoint routeCenter;
+@property (nonatomic) CGPoint wxCenter;
 
 @end
 
@@ -45,12 +47,22 @@
     self.routeButton.layer.cornerRadius = 5;
     self.currentWxButton.layer.cornerRadius = 5;
     
+    self.routeButton.alpha = 0.0;
+    self.currentWxButton.alpha = 0.0;
+    
     [self registerForKeyboardNotifications];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [UIView animateWithDuration:0.5 delay:0.2 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.routeButton.alpha = 1.0;;
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.5 delay:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.currentWxButton.alpha = 1.0;
+    } completion:nil];
 }
 
 #pragma mark - UITextFieldDelegate

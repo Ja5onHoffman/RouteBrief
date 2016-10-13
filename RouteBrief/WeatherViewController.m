@@ -187,7 +187,6 @@
     return none;
 }
 
-// Not working
 - (UIColor *)getColorForLabelInCell:(UITableViewCell *)cell {
     UIColor *vfr = [UIColor colorWithRed:127.0f/255.0f green:255.0f/255.0f blue:205.0f/255.0f alpha:1.0];
     UIColor *mvfr = [UIColor colorWithRed:255.0f/255.0f green:255.0f/255.0f blue:140.0f/255.0f alpha:1.0];
@@ -204,7 +203,6 @@
     
     return none;
 }
-
 
 // NSPredicate to find 'instrumentation' dictionary in tags
 - (NSString *)getConditionsFromArray:(NSArray *)array {
